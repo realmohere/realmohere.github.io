@@ -1,0 +1,32 @@
+# Mo Mohammadi
+
+> Mo Mohammadi is a mechanical engineer based in North Brabant, the Netherlands. Mo works on process improvement in GMP-regulated manufacturing and combines engineering with a master's in Philosophy, Politics & Economics. Mo is open to junior and medior process or manufacturing engineering roles and is authorised to work in the Netherlands.
+
+- Website: https://realmohere.github.io/
+- LinkedIn: https://www.linkedin.com/in/mo-mohammadi-55290210a
+- GitHub: https://github.com/realmohere
+- Contact: see the Contact section of https://realmohere.github.io/
+
+## Experience
+
+- Production Operator, ViCentra (Kaleido), Utrecht, NL (Jun 2025 – Sep 2026): GMP cleanroom line for insulin pumps. Introduced pre-staging of critical components before Base Assembly, cutting waiting time. Found a recurring cable-interference risk in a production machine, which led to a permanent engineering fix.
+- Project Assistant, Duisburg Business & Innovation GmbH, DE (Mar 2024 – Sep 2024): coordinated cross-functional innovation projects; master's thesis on circular-economy transitions.
+- Business Development Consultant, 1&1 AG, Düsseldorf, DE (Mar 2023 – Feb 2024): Python automation for network monitoring and quality reporting.
+- Instructor, Warehouse Operations, Amazon (DTM9), Witten, DE (Jun 2022 – Mar 2023).
+- Regional Country Manager, Taiwan Trade Center, Tehran (Dec 2019 – Dec 2020).
+- Assistant Mechanical Engineer, Saba-Sim Co., Isfahan (Jul 2017 – Jun 2019): improvements that raised operational efficiency by more than 20%; failure analysis, AutoCAD design, Ansys analysis, cost estimates.
+
+## Education
+
+- M.A. Philosophy, Politics & Economics, Witten/Herdecke University, Germany (2022 – 2026)
+- Exchange, Sustainability Management, Vrije Universiteit Amsterdam (2024 – 2025)
+- B.Sc. Mechanical Engineering, Azad University, Damavand (2010 – 2016)
+- Certification: NDT Technician (SNT-TC-1A)
+
+## Skills
+
+Process improvement, bottleneck analysis, Lean, root-cause analysis, GMP, cleanroom operations, medical device assembly, failure analysis, NDT, AutoCAD, Ansys Mechanical, SolidWorks (beginner), Python, cost estimation, project coordination.
+
+## Languages
+
+Persian (native), English (C1), German (A2), Dutch (beginner, working toward A2).
