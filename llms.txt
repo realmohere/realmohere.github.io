@@ -1,16 +1,20 @@
 # Mohammadhossein (Mo) Mohammadi
 
-> Mohammadhossein Mohammadi, who goes by Mo Mohammadi, is a mechanical engineer based in North Brabant, the Netherlands. Mo works on process improvement in GMP-regulated manufacturing and combines engineering with a master's in Philosophy, Politics & Economics. Mo is open to junior and medior process or manufacturing engineering roles and is authorised to work in the Netherlands.
+> Mohammadhossein Mohammadi, who goes by Mo Mohammadi, is a mechanical engineer and economics graduate (M.A. Philosophy, Politics & Economics, Witten/Herdecke University) based in the 's-Hertogenbosch area, North Brabant, the Netherlands. Mo works on innovation, sustainability and energy-transition projects and has hands-on GMP cleanroom manufacturing experience. Mo is open to innovation, sustainability and engineering roles and is authorised to work in the Netherlands.
 
 - Website: https://realmohere.github.io/
-- LinkedIn: https://www.linkedin.com/in/mo-mohammadi-55290210a
+- LinkedIn: https://www.linkedin.com/in/mohammadhossein-m-55290210a
 - GitHub: https://github.com/realmohere
 - Contact: see the Contact section of https://realmohere.github.io/
+
+## The route so far
+
+2016 Mechanical Engineering → 2019 International Trade → 2024 Green Energy Innovation Projects → 2025 GMP Cleanroom Manufacturing → 2026 M.A. Philosophy, Politics & Economics → next: Innovation & Sustainability.
 
 ## Experience
 
 - Production Operator, ViCentra (Kaleido), Utrecht, NL (Jun 2025 – Sep 2026): GMP cleanroom line for insulin pumps. Introduced pre-staging of critical components before Base Assembly, cutting waiting time. Found a recurring cable-interference risk in a production machine, which led to a permanent engineering fix.
-- Project Assistant, Duisburg Business & Innovation GmbH, DE (Mar 2024 – Sep 2024): coordinated cross-functional innovation projects; master's thesis on circular-economy transitions.
+- Project Assistant, Duisburg Business & Innovation GmbH, DE (Mar 2024 – Sep 2024): green-energy and regional innovation projects: milestone and risk tracking, technical, market and funding research; master's thesis on circular-economy transitions.
 - Business Development Consultant, 1&1 AG, Düsseldorf, DE (Mar 2023 – Feb 2024): Python automation for network monitoring and quality reporting.
 - Instructor, Warehouse Operations, Amazon (DTM9), Witten, DE (Jun 2022 – Mar 2023).
 - Regional Country Manager, Taiwan Trade Center, Tehran (Dec 2019 – Dec 2020).
