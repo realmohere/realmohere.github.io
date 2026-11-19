@@ -51,7 +51,7 @@
       { "@type": "EducationalOccupationalCredential", "credentialCategory": "degree", "name": "B.Sc. Mechanical Engineering" },
       { "@type": "EducationalOccupationalCredential", "credentialCategory": "certification", "name": "NDT Technician (SNT-TC-1A)" }
     ],
-    "knowsAbout": ["Political economy", "Policy analysis", "Strategy", "Institutional analysis", "Stakeholder management", "Innovation projects", "Sustainability", "Energy transition", "Green energy", "Economics", "Process improvement", "Manufacturing engineering", "GMP manufacturing", "Cleanroom operations", "Medical device assembly", "Root-cause analysis", "Lean manufacturing", "Failure analysis", "Non-destructive testing", "AutoCAD", "Ansys Mechanical", "Python", "Circular economy", "Project coordination"],
+    "knowsAbout": ["Event organisation", "Marketing communication", "Political economy", "Policy analysis", "Strategy", "Institutional analysis", "Stakeholder management", "Innovation projects", "Sustainability", "Energy transition", "Green energy", "Economics", "Process improvement", "Manufacturing engineering", "GMP manufacturing", "Cleanroom operations", "Medical device assembly", "Root-cause analysis", "Lean manufacturing", "Failure analysis", "Non-destructive testing", "AutoCAD", "Ansys Mechanical", "Python", "Circular economy", "Project coordination"],
     "knowsLanguage": ["Persian", "English", "German", "Dutch"],
     "sameAs": [
       "https://www.linkedin.com/in/mohammadhossein-m-55290210a",
@@ -278,6 +278,19 @@ section { scroll-margin-top: 72px; }
   .route li::after { left: 12px; right: -16px; top: 5px; bottom: auto; width: auto; height: 2px; }
   .route .yr { margin-bottom: 4px; }
 }
+
+/* Volunteering */
+.vol { display: grid; gap: 24px; align-items: start; }
+@media (min-width: 760px) { .vol { grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 32px; } }
+.vol-photo { margin: 0; }
+.vol-photo img { display: block; width: 100%; height: auto; border-radius: 12px; border: 1px solid var(--line); }
+.vol-photo figcaption { font: 400 0.75rem/1.5 var(--mono); color: var(--muted); margin-top: 10px; }
+.vol-text { min-width: 0; }
+.vol-text h3 { font: 600 1.25rem/1.3 var(--display); margin: 4px 0 4px; letter-spacing: -0.01em; }
+.vol-text .when-line { font: 400 0.8125rem/1.6 var(--mono); color: var(--muted); margin: 0; }
+.vol-text .org-line { color: var(--muted); margin: 0 0 14px; }
+.vol-text p { max-width: 58ch; }
+.vol-list { margin: 0 0 16px; padding-left: 1.1em; display: grid; gap: 6px; color: var(--muted); }
 </style>
 </head>
 <body>
@@ -408,8 +421,34 @@ section { scroll-margin-top: 72px; }
     </div>
   </section>
 
+  <section id="volunteering">
+    <div class="label"><b>03</b> · Volunteering</div>
+    <div>
+      <h2>Organising the 8th International PPE Conference</h2>
+      <div class="vol">
+        <figure class="vol-photo">
+          <img src="ppe-conference-team.jpg" width="1100" height="1045" loading="lazy" alt="Mohammadhossein (Mo) Mohammadi with fellow members of the organising team on stage at the 8th International PPE Conference, Witten/Herdecke University, 2024">
+          <figcaption>With the organising team at the 8th International PPE Conference, Witten/Herdecke University, 2024</figcaption>
+        </figure>
+        <div class="vol-text">
+          <p class="when-line">Mar 2023 – Apr 2024</p>
+          <h3>Conference Organizer, marketing team</h3>
+          <p class="org-line">International Philosophy, Politics &amp; Economics Conference · Universität Witten/Herdecke</p>
+          <p>I volunteered on the marketing team for the 8th International PPE Conference 2024, themed <em>"Generation on the EDGE: Environment, Democracy, Globalization and Economics"</em>, shaping how the event was presented and communicated.</p>
+          <ul class="vol-list">
+            <li>Designed banners and logos for the conference</li>
+            <li>Created social media content and promoted the conference across campus</li>
+            <li>Developed posts highlighting speakers, sessions and key dates</li>
+            <li>Planned and refined the outreach strategy together with the team</li>
+          </ul>
+          <p>It gave me hands-on experience in academic event marketing, and a closer look at how good communication supports academic exchange at the intersection of economics, politics and philosophy.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section id="education">
-    <div class="label"><b>03</b> · Education</div>
+    <div class="label"><b>04</b> · Education</div>
     <div>
       <h2>Education and certifications</h2>
       <ul class="timeline">
@@ -436,7 +475,7 @@ section { scroll-margin-top: 72px; }
   </section>
 
   <section id="skills">
-    <div class="label"><b>04</b> · Skills</div>
+    <div class="label"><b>05</b> · Skills</div>
     <div>
       <h2>What I bring</h2>
       <div class="cols">
@@ -456,7 +495,7 @@ section { scroll-margin-top: 72px; }
   </section>
 
   <section id="contact">
-    <div class="label"><b>05</b> · Contact</div>
+    <div class="label"><b>06</b> · Contact</div>
     <div>
       <h2>Let's talk</h2>
       <div class="contact-row">
