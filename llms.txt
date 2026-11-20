@@ -35,7 +35,7 @@
 
 From the M.A. PPE: economic analysis, political economy, institutional economics, policy and institutional analysis, governance and decision-making, stakeholder mapping, sustainability and energy-transition policy, circular economy, ethics and responsible innovation, critical thinking and argumentation, qualitative and desk research, academic writing.
 
-From engineering and industry: Process improvement, bottleneck analysis, Lean, root-cause analysis, GMP, cleanroom operations, medical device assembly, failure analysis, NDT, AutoCAD, Ansys Mechanical, SolidWorks (beginner), Python, cost estimation, project coordination.
+From engineering and industry: Process improvement, bottleneck analysis, Lean, root-cause analysis, GMP, cleanroom operations, medical device assembly, failure analysis, NDT, AutoCAD, Ansys Mechanical, SolidWorks, Python, cost estimation, project coordination.
 
 ## Languages
 
