@@ -937,7 +937,7 @@ section { scroll-margin-top: 72px; }
       // twigs with leaves along the trunk, away from the project branches
       for (var ty = 90, side = 1; ty < end - 60; ty += 70 + rnd() * 50, side = -side) {
         if (nodeYs.some(function (v) { return Math.abs(v - ty) < 50; })) continue;
-        var g = el('g', { 'class': 'br' }, svg), x = xAt(ty), len = 18 + rnd() * 16;
+        var g = el('g', { 'class': 'br' }, svg), x = xAt(ty), len = wide ? 18 + rnd() * 16 : 8 + rnd() * 6;
         var tw = el('path', { 'class': 'twig', pathLength: 1, d: 'M' + x.toFixed(1) + ' ' + ty + 'q' + (side * len * 0.6).toFixed(1) + ' -2 ' + (side * len).toFixed(1) + ' -' + (8 + rnd() * 8).toFixed(1) }, g);
         var tp = tw.getPointAtLength(tw.getTotalLength());
         leaf(g, tp.x, tp.y, side > 0 ? -25 : -155, 0.6 + rnd() * 0.4, ['', 'l2', 'l3'][Math.floor(rnd() * 3)]);
