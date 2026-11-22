@@ -174,6 +174,12 @@ h2 { font: 700 clamp(1.625rem, 3.4vw, 2.125rem)/1.15 var(--display); letter-spac
 .project:hover h3 { color: var(--accent); }
 .project:hover h3::after { content: " →"; }
 
+.project:not(a):hover h3 { color: inherit; }
+.project:not(a):hover h3::after { content: none; }
+.proj-group { font: 500 0.75rem/1.4 var(--mono); text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin: 32px 0 4px; }
+.proj-group:first-of-type { margin-top: 0; }
+.project .status { font: 500 0.75rem/1 var(--mono); color: var(--muted); border: 1px solid var(--line); padding: 4px 7px; border-radius: 4px; margin-left: 8px; vertical-align: 2px; white-space: nowrap; }
+
 /* Experience */
 .timeline { list-style: none; margin: 0; padding: 0; }
 .timeline li { display: grid; gap: 4px 24px; padding-block: 18px; border-top: 1px solid var(--line); }
@@ -311,6 +317,7 @@ section { scroll-margin-top: 72px; }
     <nav class="nav" aria-label="Sections">
       <a href="#about">About</a>
       <a href="#experience">Experience</a>
+      <a href="#projects">Projects</a>
       <a href="#education">Education</a>
       <a href="#skills">Skills</a>
       <a href="#contact">Contact</a>
@@ -430,8 +437,72 @@ section { scroll-margin-top: 72px; }
     </div>
   </section>
 
+  <section id="projects">
+    <div class="label"><b>03</b> · Projects</div>
+    <div>
+      <h2>Projects: what I'm building now, and what I've worked on</h2>
+      <p class="proj-group">Building now</p>
+      <div class="projects">
+        <article class="project">
+          <h3>Meetout <span class="status">In development</span></h3>
+          <span class="year">2026</span>
+          <p>A mobile-first app for meeting new people around Oss through small, public hangouts: post a plan, others ask to join, the host accepts, and the group chats and meets. After meeting, people leave references, which builds trust over time. I designed the product rules (18+ check, public meeting spots, safety features) and built a working demo; the launch version runs on Firebase with an Android app.</p>
+          <div class="tags"><span>Product design</span><span>React</span><span>TypeScript</span><span>Firebase</span><span>Android</span></div>
+        </article>
+        <article class="project">
+          <h3>Dogout <span class="status">In development</span></h3>
+          <span class="year">2026</span>
+          <p>Dog play dates in Noord-Brabant, starting in Oss. Owners make a profile for their dog, get matched with dogs of similar energy, size and play style, and plan open or private play dates. Built by reusing the Meetout codebase, in Dutch and English.</p>
+          <div class="tags"><span>Product design</span><span>React</span><span>Firebase</span><span>Bilingual NL/EN</span></div>
+        </article>
+        <article class="project">
+          <h3>Tend <span class="status">Prototype</span></h3>
+          <span class="year">2026</span>
+          <p>A no-shame life game for adults with ADHD, informed by CBT techniques: small real-life steps help your avatar grow, and missing a day never costs you anything. A playtest prototype, run like a small company with AI agents in roles from product and design to privacy, marketing and finance.</p>
+          <div class="tags"><span>Game design</span><span>Behaviour change</span><span>JavaScript</span><span>AI agents</span></div>
+        </article>
+        <article class="project">
+          <h3>This website <span class="status">Live</span></h3>
+          <span class="year">2026</span>
+          <p>My personal site, built as plain HTML and hosted free on GitHub Pages. Set up search-engine and AI-search visibility (structured data, sitemap, Google Search Console and Bing) and privacy-friendly, cookieless visitor statistics.</p>
+          <div class="tags"><span>HTML/CSS</span><span>SEO</span><span>Analytics</span></div>
+        </article>
+      </div>
+      <p class="proj-group">Research and study</p>
+      <div class="projects">
+        <article class="project">
+          <h3>From Linear to Circular: circular-economy thesis</h3>
+          <span class="year">M.A. thesis</span>
+          <p>How policy, institutions, incentives and cooperation shape the move from linear to circular production in post-industrial Duisburg, with Amsterdam and Singapore as comparative cases. Written with Duisburg Business &amp; Innovation GmbH.</p>
+          <div class="tags"><span>Circular economy</span><span>Policy analysis</span><span>Economic resilience</span><span>Case study</span></div>
+        </article>
+        <article class="project">
+          <h3>Zon op Haarlemmermeer: marketing a citizen solar project</h3>
+          <span class="year">2025</span>
+          <p>Team case study at Vrije Universiteit Amsterdam (Marketing Sustainable Innovations). A new energy cooperative needed to sell 70% of the shares in a roughly 400-panel solar roof on a municipal building before it could be built, and had sold 20%. We analysed the barriers, mapped the stakeholders, built a value-exchange model, and proposed a marketing campaign, buy-in strategy and co-creation plan.</p>
+          <div class="tags"><span>Energy transition</span><span>Stakeholder mapping</span><span>Marketing strategy</span><span>Community energy</span></div>
+        </article>
+      </div>
+      <p class="proj-group">Engineering and tools</p>
+      <div class="projects">
+        <article class="project">
+          <h3>Hydrogen-generation prototype</h3>
+          <span class="year">Engineering</span>
+          <p>Designed and built a working steel-plate hydrogen-generation system, from concept through construction to practical testing of gas output.</p>
+          <div class="tags"><span>Mechanical design</span><span>Prototyping</span><span>Testing</span></div>
+        </article>
+        <article class="project">
+          <h3>GPT-based research assistant</h3>
+          <span class="year">Research tool</span>
+          <p>Built a GPT-based assistant that identifies start-ups and organises their contact information by country and city, to speed up market and partner research.</p>
+          <div class="tags"><span>AI tools</span><span>Market research</span><span>Automation</span></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
   <section id="volunteering">
-    <div class="label"><b>03</b> · Volunteering</div>
+    <div class="label"><b>04</b> · Volunteering</div>
     <div>
       <h2>Organising the 8th International PPE Conference</h2>
       <div class="vol">
@@ -457,7 +528,7 @@ section { scroll-margin-top: 72px; }
   </section>
 
   <section id="education">
-    <div class="label"><b>04</b> · Education</div>
+    <div class="label"><b>05</b> · Education</div>
     <div>
       <h2>Education: M.A. PPE and B.Sc. Mechanical Engineering</h2>
       <ul class="timeline">
@@ -484,7 +555,7 @@ section { scroll-margin-top: 72px; }
   </section>
 
   <section id="skills">
-    <div class="label"><b>05</b> · Skills</div>
+    <div class="label"><b>06</b> · Skills</div>
     <div>
       <h2>Skills and languages</h2>
       <p class="group group-first">From my M.A. in Philosophy, Politics &amp; Economics</p>
@@ -512,7 +583,7 @@ section { scroll-margin-top: 72px; }
   </section>
 
   <section id="contact">
-    <div class="label"><b>06</b> · Contact</div>
+    <div class="label"><b>07</b> · Contact</div>
     <div>
       <h2>Contact Mohammadhossein Mohammadi</h2>
       <div class="contact-row">
