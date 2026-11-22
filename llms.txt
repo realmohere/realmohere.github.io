@@ -33,7 +33,8 @@ Research and study:
 - Zon op Haarlemmermeer (2025, VU Amsterdam team case study): marketing and buy-in strategy for a citizen energy cooperative's ~400-panel municipal solar roof (20% of shares sold, 70% needed), with stakeholder mapping and a value-exchange model.
 
 Engineering and tools:
-- Hydrogen-generation prototype: designed, built and tested a steel-plate hydrogen-generation system.
+- AI workflow automation (2026): Python pipelines that check online sources on a schedule, filter and score items with AI, draft tailored documents and wait for human approval before anything is sent; an AI-to-AI review loop with regression tests and command audit.
+- Hydrogen-generation prototype (personal side project): designed, built and tested a steel-plate hydrogen-generation system.
 - GPT-based research assistant that identifies start-ups and organises contacts by country and city.
 
 ## Volunteering
