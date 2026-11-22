@@ -174,11 +174,53 @@ h2 { font: 700 clamp(1.625rem, 3.4vw, 2.125rem)/1.15 var(--display); letter-spac
 .project:hover h3 { color: var(--accent); }
 .project:hover h3::after { content: " →"; }
 
-.project:not(a):hover h3 { color: inherit; }
-.project:not(a):hover h3::after { content: none; }
-.proj-group { font: 500 0.75rem/1.4 var(--mono); text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin: 32px 0 4px; }
-.proj-group:first-of-type { margin-top: 0; }
-.project .status { font: 500 0.75rem/1 var(--mono); color: var(--muted); border: 1px solid var(--line); padding: 4px 7px; border-radius: 4px; margin-left: 8px; vertical-align: 2px; white-space: nowrap; }
+
+/* Project tree: the trunk grows as you scroll and each branch carries a project.
+   Without JS or with reduced motion everything is simply shown. */
+.tree-intro { color: var(--muted); margin: -8px 0 28px; max-width: 58ch; }
+.tree { position: relative; --tx: 14px; }
+.tree::before { content: ""; position: absolute; left: calc(var(--tx) - 1.5px); top: 0; bottom: 0; width: 3px; border-radius: 3px; background: var(--line); }
+.tree.ready::before { display: none; }
+.tree-svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+.tree-svg .trunk { fill: none; stroke: var(--muted); stroke: color-mix(in oklab, var(--accent) 40%, var(--muted)); stroke-width: 4; stroke-linecap: round; }
+.tree-svg .branch { fill: none; stroke: var(--accent); stroke-width: 2.5; stroke-linecap: round; }
+.tree-svg .leaf { fill: var(--accent); opacity: .85; transform-box: fill-box; transform-origin: 0% 50%; }
+.tree-svg .tip { fill: var(--accent); stroke: var(--bg); stroke-width: 2; transition: opacity .3s; }
+.tree-svg .knot { fill: var(--bg); stroke: var(--accent); stroke-width: 2.5; }
+.tree-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 26px; }
+.tree-list > li { position: relative; margin-left: 40px; }
+.tree-list .stage { margin-left: 0; }
+.stage span { display: inline-block; font: 500 0.75rem/1 var(--mono); text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); background: var(--bg); border: 1px solid var(--line); border-radius: 999px; padding: 8px 12px; }
+.leafcard { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 18px 20px 20px; }
+.leafcard h3 { font: 600 1.2rem/1.3 var(--display); margin: 0; letter-spacing: -0.01em; }
+.leafcard .meta { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; font: 400 0.8125rem/1.4 var(--mono); color: var(--muted); margin: 6px 0 10px; }
+.leafcard .status { font: 500 0.6875rem/1 var(--mono); text-transform: uppercase; letter-spacing: 0.06em; color: var(--accent); border: 1px solid currentColor; padding: 4px 7px; border-radius: 999px; }
+.leafcard p { margin: 0; color: var(--muted); font-size: 0.9875rem; }
+.leafcard .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+.leafcard .tags span { font: 500 0.75rem/1 var(--mono); color: var(--accent); background: var(--accent-soft); padding: 5px 8px; border-radius: 4px; }
+.tree-list .bud { margin-left: 0; padding-top: 6px; }
+.bud span { display: inline-flex; gap: 8px; align-items: center; font: 600 1rem/1.3 var(--display); color: var(--fg); background: var(--accent-soft); border-radius: 999px; padding: 10px 16px 10px 12px; }
+.bud svg { width: 20px; height: 20px; color: var(--accent); flex: none; }
+@media (min-width: 900px) {
+  .tree { --tx: 50%; }
+  .tree-list { gap: 18px; }
+  .tree-list > li.node { width: calc(50% - 44px); margin-left: 0; }
+  .tree-list > li.node.r { margin-left: calc(50% + 44px); }
+  .tree-list .stage, .tree-list .bud { text-align: center; }
+  .tree-list > li.node + li.node { margin-top: -40px; }
+}
+/* Growth animation (JS adds .grow only when the visitor allows motion) */
+.tree.grow .node .leafcard { opacity: 0; transform: translateY(18px) scale(.97); transition: opacity .55s ease, transform .6s cubic-bezier(.2,.7,.2,1); }
+.tree.grow .node.on .leafcard { opacity: 1; transform: none; }
+.tree.grow .stage span, .tree.grow .bud span { opacity: 0; transform: scale(.85); transition: opacity .4s ease, transform .5s cubic-bezier(.3,1.4,.5,1); }
+.tree.grow .stage.on span, .tree.grow .bud.on span { opacity: 1; transform: none; }
+.tree.grow .br .branch { stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset .6s ease; }
+.tree.grow .br.on .branch { stroke-dashoffset: 0; }
+.tree.grow .br .leaf { transform: scale(0); transition: transform .45s cubic-bezier(.3,1.5,.5,1) .3s; }
+.tree.grow .br.on .leaf { transform: scale(1); }
+.tree.grow .br .knot { transform: scale(0); transform-box: fill-box; transform-origin: center; transition: transform .3s ease; }
+.tree.grow .br.on .knot { transform: scale(1); }
+@media print { .tree.grow .node .leafcard, .tree.grow .stage span, .tree.grow .bud span { opacity: 1; transform: none; } }
 
 /* Experience */
 .timeline { list-style: none; margin: 0; padding: 0; }
@@ -440,69 +482,88 @@ section { scroll-margin-top: 72px; }
   <section id="projects">
     <div class="label"><b>03</b> · Projects</div>
     <div>
-      <h2>Projects: what I'm building now, and what I've worked on</h2>
-      <p class="proj-group">Building now</p>
-      <div class="projects">
-        <article class="project">
-          <h3>Meetout <span class="status">In development</span></h3>
-          <span class="year">2026</span>
-          <p>A mobile-first app for meeting new people around Oss through small, public hangouts: post a plan, others ask to join, the host accepts, and the group chats and meets. After meeting, people leave references, which builds trust over time. I designed the product rules (18+ check, public meeting spots, safety features) and built a working demo; the launch version runs on Firebase with an Android app.</p>
-          <div class="tags"><span>Product design</span><span>React</span><span>TypeScript</span><span>Firebase</span><span>Android</span></div>
-        </article>
-        <article class="project">
-          <h3>Dogout <span class="status">In development</span></h3>
-          <span class="year">2026</span>
-          <p>Dog play dates in Noord-Brabant, starting in Oss. Owners make a profile for their dog, get matched with dogs of similar energy, size and play style, and plan open or private play dates. Built by reusing the Meetout codebase, in Dutch and English.</p>
-          <div class="tags"><span>Product design</span><span>React</span><span>Firebase</span><span>Bilingual NL/EN</span></div>
-        </article>
-        <article class="project">
-          <h3>Tend <span class="status">Prototype</span></h3>
-          <span class="year">2026</span>
-          <p>A no-shame life game for adults with ADHD, informed by CBT techniques: small real-life steps help your avatar grow, and missing a day never costs you anything. A playtest prototype, run like a small company with AI agents in roles from product and design to privacy, marketing and finance.</p>
-          <div class="tags"><span>Game design</span><span>Behaviour change</span><span>JavaScript</span><span>AI agents</span></div>
-        </article>
-        <article class="project">
-          <h3>This website <span class="status">Live</span></h3>
-          <span class="year">2026</span>
-          <p>My personal site, built as plain HTML and hosted free on GitHub Pages. Set up search-engine and AI-search visibility (structured data, sitemap, Google Search Console and Bing) and privacy-friendly, cookieless visitor statistics.</p>
-          <div class="tags"><span>HTML/CSS</span><span>SEO</span><span>Analytics</span></div>
-        </article>
-      </div>
-      <p class="proj-group">Research and study</p>
-      <div class="projects">
-        <article class="project">
-          <h3>From Linear to Circular: circular-economy thesis</h3>
-          <span class="year">M.A. thesis</span>
-          <p>How policy, institutions, incentives and cooperation shape the move from linear to circular production in post-industrial Duisburg, with Amsterdam and Singapore as comparative cases. Written with Duisburg Business &amp; Innovation GmbH.</p>
-          <div class="tags"><span>Circular economy</span><span>Policy analysis</span><span>Economic resilience</span><span>Case study</span></div>
-        </article>
-        <article class="project">
-          <h3>Zon op Haarlemmermeer: marketing a citizen solar project</h3>
-          <span class="year">2025</span>
-          <p>Team case study at Vrije Universiteit Amsterdam (Marketing Sustainable Innovations). A new energy cooperative needed to sell 70% of the shares in a roughly 400-panel solar roof on a municipal building before it could be built, and had sold 20%. We analysed the barriers, mapped the stakeholders, built a value-exchange model, and proposed a marketing campaign, buy-in strategy and co-creation plan.</p>
-          <div class="tags"><span>Energy transition</span><span>Stakeholder mapping</span><span>Marketing strategy</span><span>Community energy</span></div>
-        </article>
-      </div>
-      <p class="proj-group">Engineering and tools</p>
-      <div class="projects">
-        <article class="project">
-          <h3>Hydrogen-generation prototype</h3>
-          <span class="year">Side project</span>
-          <p>Designed and built a working steel-plate hydrogen-generation system, from concept through construction to practical testing of gas output.</p>
-          <div class="tags"><span>Mechanical design</span><span>Prototyping</span><span>Testing</span></div>
-        </article>
-        <article class="project">
-          <h3>AI workflow automation</h3>
-          <span class="year">2026</span>
-          <p>Python pipelines that check online sources on a schedule, filter and score new items with AI, draft tailored documents, and stop for a one-tap human approval before anything is sent. Plus a review loop in which two AI models check each other's work, backed by automated regression tests and an audit of every command run.</p>
-          <div class="tags"><span>Python</span><span>AI agents</span><span>Automation</span><span>Testing</span></div>
-        </article>
-        <article class="project">
-          <h3>GPT-based research assistant</h3>
-          <span class="year">Research tool</span>
-          <p>Built a GPT-based assistant that identifies start-ups and organises their contact information by country and city, to speed up market and partner research.</p>
-          <div class="tags"><span>AI tools</span><span>Market research</span><span>Automation</span></div>
-        </article>
+      <h2>My project tree: from engineering roots to what I'm growing now</h2>
+      <p class="tree-intro">Every branch is a project. Scroll down and watch it grow, from my engineering roots to the things I'm building today.</p>
+      <div class="tree" id="tree">
+        <svg class="tree-svg" aria-hidden="true" focusable="false"></svg>
+        <ol class="tree-list" aria-label="Projects">
+        <li class="stage"><span>Roots · Engineering</span></li>
+        <li class="node l">
+          <article class="leafcard">
+            <h3>Hydrogen-generation prototype</h3>
+            <p class="meta"><span>Personal side project</span></p>
+            <p>Designed and built a working steel-plate hydrogen-generation system, from concept through construction to practical testing of gas output.</p>
+            <div class="tags"><span>Mechanical design</span><span>Prototyping</span><span>Testing</span></div>
+          </article>
+        </li>
+        <li class="node r">
+          <article class="leafcard">
+            <h3>GPT-based research assistant</h3>
+            <p class="meta"><span>Research tool</span></p>
+            <p>Built a GPT-based assistant that identifies start-ups and organises their contact information by country and city, to speed up market and partner research.</p>
+            <div class="tags"><span>AI tools</span><span>Market research</span><span>Automation</span></div>
+          </article>
+        </li>
+        <li class="stage"><span>Growth · Research and study</span></li>
+        <li class="node l">
+          <article class="leafcard">
+            <h3>Zon op Haarlemmermeer: marketing a citizen solar project</h3>
+            <p class="meta"><span>2025 · Team case study, VU Amsterdam</span></p>
+            <p>A new energy cooperative needed to sell 70% of the shares in a roughly 400-panel solar roof on a municipal building before it could be built, and had sold 20%. Our team analysed the barriers, mapped the stakeholders, built a value-exchange model, and proposed a marketing campaign, buy-in strategy and co-creation plan.</p>
+            <div class="tags"><span>Energy transition</span><span>Stakeholder mapping</span><span>Marketing strategy</span><span>Community energy</span></div>
+          </article>
+        </li>
+        <li class="node r">
+          <article class="leafcard">
+            <h3>From Linear to Circular: circular-economy thesis</h3>
+            <p class="meta"><span>M.A. thesis, with Duisburg Business &amp; Innovation</span></p>
+            <p>How policy, institutions, incentives and cooperation shape the move from linear to circular production in post-industrial Duisburg, with Amsterdam and Singapore as comparative cases.</p>
+            <div class="tags"><span>Circular economy</span><span>Policy analysis</span><span>Economic resilience</span><span>Case study</span></div>
+          </article>
+        </li>
+        <li class="stage"><span>New shoots · Building now</span></li>
+        <li class="node l">
+          <article class="leafcard">
+            <h3>This website</h3>
+            <p class="meta"><span>2026</span><span class="status">Live</span></p>
+            <p>My personal site, built as plain HTML and hosted free on GitHub Pages. Set up search-engine and AI-search visibility (structured data, sitemap, Google Search Console and Bing) and privacy-friendly, cookieless visitor statistics.</p>
+            <div class="tags"><span>HTML/CSS</span><span>SEO</span><span>Analytics</span></div>
+          </article>
+        </li>
+        <li class="node r">
+          <article class="leafcard">
+            <h3>Meetout</h3>
+            <p class="meta"><span>2026</span><span class="status">In development</span></p>
+            <p>A mobile-first app for meeting new people around Oss through small, public hangouts: post a plan, others ask to join, the host accepts, and the group chats and meets. After meeting, people leave references, which builds trust over time. Built with safety in mind (18+ check, public meeting spots); the launch version runs on Firebase with an Android app.</p>
+            <div class="tags"><span>Product design</span><span>React</span><span>TypeScript</span><span>Firebase</span><span>Android</span></div>
+          </article>
+        </li>
+        <li class="node l">
+          <article class="leafcard">
+            <h3>Dogout</h3>
+            <p class="meta"><span>2026</span><span class="status">In development</span></p>
+            <p>Dog play dates in Noord-Brabant, starting in Oss. Owners make a profile for their dog, get matched with dogs of similar energy, size and play style, and plan open or private play dates. Built by reusing the Meetout codebase, in Dutch and English.</p>
+            <div class="tags"><span>Product design</span><span>React</span><span>Firebase</span><span>Bilingual NL/EN</span></div>
+          </article>
+        </li>
+        <li class="node r">
+          <article class="leafcard">
+            <h3>Tend</h3>
+            <p class="meta"><span>2026</span><span class="status">Prototype</span></p>
+            <p>A no-shame life game for adults with ADHD, informed by CBT techniques: small real-life steps help your avatar grow, and missing a day never costs you anything. A playtest prototype, run like a small company with AI agents in roles from product and design to privacy, marketing and finance.</p>
+            <div class="tags"><span>Game design</span><span>Behaviour change</span><span>JavaScript</span><span>AI agents</span></div>
+          </article>
+        </li>
+        <li class="node l">
+          <article class="leafcard">
+            <h3>AI workflow automation</h3>
+            <p class="meta"><span>2026</span></p>
+            <p>Python pipelines that check online sources on a schedule, filter and score new items with AI, draft tailored documents, and stop for a one-tap human approval before anything is sent. Plus a review loop in which two AI models check each other's work, backed by automated regression tests and an audit of every command run.</p>
+            <div class="tags"><span>Python</span><span>AI agents</span><span>Automation</span><span>Testing</span></div>
+          </article>
+        </li>
+        <li class="bud"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21v-9"/><path d="M12 12c0-4 3-7 8-7 0 5-3 7-8 7z"/><path d="M12 14c0-3-2.5-5.5-7-5.5 0 4 2.5 5.5 7 5.5z"/></svg>Next: innovation &amp; sustainability</span></li>
+        </ol>
       </div>
     </div>
   </section>
@@ -659,6 +720,83 @@ section { scroll-margin-top: 72px; }
     function fallback() { var r = document.createRange(); r.selectNodeContents(email); var s = getSelection(); s.removeAllRanges(); s.addRange(r); copy.textContent = 'Press Ctrl/Cmd+C'; }
     try { navigator.clipboard.writeText(text).then(done, fallback); } catch (e) { fallback(); }
   });
+
+  // Project tree: draw trunk and branches from the real card positions, grow them with scroll.
+  (function () {
+    var tree = document.getElementById('tree');
+    if (!tree || !window.SVGElement) return;
+    var svg = tree.querySelector('.tree-svg');
+    var items = [].slice.call(tree.querySelectorAll('.tree-list > li'));
+    var NS = 'http://www.w3.org/2000/svg';
+    var still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var trunk, tip, tipL = 0, parts = [], H = 1, grown = 0, ticking = false;
+    function el(n, a) { var e = document.createElementNS(NS, n); for (var k in a) e.setAttribute(k, a[k]); return e; }
+    function build() {
+      var W = tree.clientWidth; H = tree.clientHeight || 1;
+      var wide = W >= 700 && getComputedStyle(tree).getPropertyValue('--tx').trim() === '50%';
+      var tx = wide ? W / 2 : 14, amp = wide ? 7 : 2.5;
+      function xAt(y) { return tx + amp * Math.sin(y / 85); }
+      svg.textContent = ''; parts = [];
+      svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
+      var d = 'M' + xAt(0).toFixed(1) + ' 0';
+      for (var y = 20; y < H; y += 20) d += 'L' + xAt(y).toFixed(1) + ' ' + y;
+      d += 'L' + xAt(H).toFixed(1) + ' ' + H;
+      trunk = el('path', { d: d, 'class': 'trunk', pathLength: 1, 'stroke-dasharray': 1 });
+      svg.appendChild(trunk);
+      tipL = trunk.getTotalLength(); tip = el('circle', { 'class': 'tip', r: 5 }); svg.appendChild(tip);
+      items.forEach(function (li) {
+        var g = el('g', { 'class': 'br' }), top = li.offsetTop, y;
+        if (li.classList.contains('node')) {
+          var right = li.offsetLeft > tx, edge = right ? li.offsetLeft : li.offsetLeft + li.offsetWidth;
+          if (!wide) edge = li.offsetLeft;
+          var dir = edge > tx ? 1 : -1, yEnd = top + 30, y0 = yEnd + 34, x0 = xAt(y0);
+          var path = el('path', { 'class': 'branch', pathLength: 1,
+            d: 'M' + x0 + ' ' + y0 + 'C' + (x0 + dir * 14) + ' ' + y0 + ' ' + (edge - dir * 18) + ' ' + yEnd + ' ' + edge + ' ' + yEnd });
+          g.appendChild(path);
+          var L = path.getTotalLength();
+          [[0.45, -1], [0.7, 1]].forEach(function (f) {
+            var pt = path.getPointAtLength(L * f[0]);
+            var ang = f[1] < 0 ? (dir > 0 ? -40 : -140) : (dir > 0 ? 35 : 145);
+            var wrap = el('g', { transform: 'translate(' + pt.x.toFixed(1) + ' ' + pt.y.toFixed(1) + ') rotate(' + ang + ')' });
+            wrap.appendChild(el('path', { 'class': 'leaf', d: 'M0 0C4-6 12-6 16 0C12 6 4 6 0 0Z' }));
+            g.appendChild(wrap);
+          });
+          g.appendChild(el('circle', { 'class': 'knot', cx: x0, cy: y0, r: 4 }));
+          y = y0;
+        } else {
+          y = top + li.offsetHeight / 2;
+        }
+        svg.appendChild(g);
+        parts.push({ li: li, g: g, at: y / H });
+      });
+      tree.classList.add('ready');
+      if (still) grown = 1;
+      paint();
+    }
+    function paint() {
+      ticking = false;
+      if (!still) {
+        var r = tree.getBoundingClientRect();
+        var p = (innerHeight * 0.72 - r.top) / r.height;
+        grown = Math.max(grown, Math.min(1, Math.max(0, p)));
+        if (r.bottom < innerHeight * 0.72) grown = 1;
+      }
+      trunk.style.strokeDashoffset = 1 - grown;
+      var pt = trunk.getPointAtLength(tipL * grown); tip.setAttribute('cx', pt.x); tip.setAttribute('cy', pt.y);
+      tip.style.opacity = (still || grown <= 0 || grown >= 1) ? 0 : 1;
+      parts.forEach(function (q) {
+        var on = q.at <= grown + 0.002;
+        q.li.classList.toggle('on', on); q.g.classList.toggle('on', on);
+      });
+    }
+    function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(paint); } }
+    if (!still) tree.classList.add('grow');
+    build();
+    addEventListener('scroll', onScroll, { passive: true });
+    var t; function rebuild() { clearTimeout(t); t = setTimeout(build, 120); }
+    if (window.ResizeObserver) new ResizeObserver(rebuild).observe(tree); else addEventListener('resize', rebuild);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(build);
+  })();
 })();
 </script>
 <!-- Visitor stats: GoatCounter (no cookies, no personal data, so no cookie banner is needed).
