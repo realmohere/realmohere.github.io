@@ -20,6 +20,23 @@
 - Regional Country Manager, Taiwan Trade Center, Tehran (Dec 2019 – Dec 2020).
 - Assistant Mechanical Engineer, Saba-Sim Co., Isfahan (Jul 2017 – Jun 2019): improvements that raised operational efficiency by more than 20%; failure analysis, AutoCAD design, Ansys analysis, cost estimates.
 
+## Projects
+
+Building now:
+- Meetout (2026, in development): mobile-first app for meeting new people around Oss through small public hangouts, with join requests, group chat and references after meeting. React, TypeScript, Firebase, Android.
+- Dogout (2026, in development): dog play dates in Noord-Brabant, starting in Oss; matches dogs by energy, size and play style. Built from the Meetout codebase, Dutch and English.
+- Tend (2026, prototype): a no-shame, CBT-informed life game for adults with ADHD, run with a team of AI role agents.
+- This website (2026, live): plain HTML on GitHub Pages with structured data, sitemap, Search Console/Bing, cookieless analytics.
+
+Research and study:
+- M.A. thesis "From Linear to Circular": policy pathways for economic resilience and sustainability in Duisburg's post-industrial transition, with Amsterdam and Singapore as comparative cases; written with Duisburg Business & Innovation GmbH.
+- Zon op Haarlemmermeer (2025, VU Amsterdam team case study): marketing and buy-in strategy for a citizen energy cooperative's ~400-panel municipal solar roof (20% of shares sold, 70% needed), with stakeholder mapping and a value-exchange model.
+
+Engineering and tools:
+- AI workflow automation (2026): Python pipelines that check online sources on a schedule, filter and score items with AI, draft tailored documents and wait for human approval before anything is sent; an AI-to-AI review loop with regression tests and command audit.
+- Hydrogen-generation prototype (personal side project): designed, built and tested a steel-plate hydrogen-generation system.
+- GPT-based research assistant that identifies start-ups and organises contacts by country and city.
+
 ## Volunteering
 
 - Conference Organizer (marketing team), 8th International Philosophy, Politics & Economics Conference, Universität Witten/Herdecke (Mar 2023 – Apr 2024). Theme: "Generation on the EDGE: Environment, Democracy, Globalization and Economics". Shaped how the event was presented and communicated: designed banners and logos, created social media content, promoted the conference across campus, developed posts on speakers, sessions and key dates, and planned the outreach strategy with the team.

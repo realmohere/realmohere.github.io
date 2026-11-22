@@ -174,6 +174,156 @@ h2 { font: 700 clamp(1.625rem, 3.4vw, 2.125rem)/1.15 var(--display); letter-spac
 .project:hover h3 { color: var(--accent); }
 .project:hover h3::after { content: " →"; }
 
+
+/* Project tree: an illustrated tree that grows as you scroll; each branch carries a project.
+   Without JS or with reduced motion the whole tree is simply shown. */
+:root { --bark: #4b5f52; --blossom: #e0892f; --blossom-2: #f3c26b; --leaf-2: #3f9a62; --leaf-3: #8bb85a; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bark: #86a596; --blossom: #f2a65a; --blossom-2: #ffd58a; --leaf-2: #58c48a; --leaf-3: #b5d978; } }
+:root[data-theme="dark"] { --bark: #86a596; --blossom: #f2a65a; --blossom-2: #ffd58a; --leaf-2: #58c48a; --leaf-3: #b5d978; }
+body { overflow-x: clip; }
+#projects { position: relative; isolation: isolate; }
+#projects::before {
+  content: ""; position: absolute; z-index: -1; top: 0; bottom: 0; left: 50%; width: 100vw; transform: translateX(-50%);
+  background:
+    radial-gradient(60% 40% at 18% 12%, color-mix(in oklab, var(--accent) 16%, transparent), transparent 70%),
+    radial-gradient(50% 35% at 85% 55%, color-mix(in oklab, var(--blossom) 12%, transparent), transparent 70%),
+    radial-gradient(55% 30% at 25% 92%, color-mix(in oklab, var(--leaf-3) 14%, transparent), transparent 70%);
+}
+#projects h2 { font-size: clamp(2rem, 5vw, 3.25rem); line-height: 1.02; letter-spacing: -0.035em; max-width: 16ch; }
+#projects h2 em { font-style: normal; color: var(--accent); background: linear-gradient(transparent 62%, color-mix(in oklab, var(--blossom) 30%, transparent) 62%); }
+.tree-intro { color: var(--muted); margin: -4px 0 56px; max-width: 52ch; font-size: 1.0625rem; }
+.tree { position: relative; --tx: 16px; }
+.tree::before { content: ""; position: absolute; left: calc(var(--tx) - 2px); top: 0; bottom: 0; width: 4px; border-radius: 4px; background: var(--bark); opacity: .5; }
+.tree.ready::before { display: none; }
+.tree-svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+.tree-svg .trunk { fill: none; stroke: var(--bark); stroke-width: 7; stroke-linecap: round; }
+.tree-svg .trunk-hi { fill: none; stroke: color-mix(in oklab, var(--bark) 55%, var(--bg)); stroke-width: 1.6; stroke-linecap: round; }
+.tree-svg .vine { fill: none; stroke: var(--accent); stroke-width: 1.6; stroke-linecap: round; opacity: .7; }
+.tree-svg .vine.b { stroke: var(--leaf-3); opacity: .6; }
+.tree-svg .branch { fill: none; stroke: var(--bark); stroke-width: 3.5; stroke-linecap: round; }
+.tree-svg .twig { fill: none; stroke: var(--bark); stroke-width: 2; stroke-linecap: round; }
+.tree-svg .leaf { fill: var(--accent); transform-box: fill-box; transform-origin: 0% 50%; }
+.tree-svg .leaf.l2 { fill: var(--leaf-2); } .tree-svg .leaf.l3 { fill: var(--leaf-3); }
+.tree-svg .vein { fill: none; stroke: var(--bg); stroke-width: .8; opacity: .55; }
+.tree-svg .petal { fill: var(--blossom); } .tree-svg .petal.p2 { fill: var(--blossom-2); }
+.tree-svg .pistil { fill: #fff6df; }
+.tree-svg .flower { transform-box: fill-box; transform-origin: center; }
+.tree-svg .seed { fill: var(--blossom); } .tree-svg .root { fill: none; stroke: var(--bark); stroke-width: 2; stroke-linecap: round; opacity: .8; }
+.tree-svg .tip { fill: var(--blossom-2); stroke: var(--blossom); stroke-width: 2; transition: opacity .3s; filter: drop-shadow(0 0 6px var(--blossom)); }
+.tree-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 30px; counter-reset: proj; }
+.tree-list > li { position: relative; margin-left: 46px; }
+.tree-list .stage { margin-left: 0; padding: 18px 0 6px; }
+.tree-list .stage.s1 { padding-top: 34px; }
+.stage-word { display: block; font: 700 clamp(2.5rem, 7vw, 4.25rem)/0.9 var(--display); letter-spacing: -0.045em; color: var(--fg); padding-left: 46px; }
+.stage-word::after { content: "."; color: var(--blossom); }
+.stage-sub { display: block; font: 500 0.75rem/1 var(--mono); text-transform: uppercase; letter-spacing: 0.14em; color: var(--accent); margin-top: 10px; padding-left: 48px; }
+.tree-list .s1 { --stage: var(--bark); } .tree-list .s2 { --stage: var(--accent); } .tree-list .s3 { --stage: var(--blossom); }
+.node { counter-increment: proj; }
+.leafcard {
+  position: relative; background: var(--surface); border: 1px solid var(--line); border-top: 4px solid var(--stage);
+  border-radius: 6px 22px 22px 22px; padding: 20px 22px 22px;
+  box-shadow: 0 1px 0 var(--line), 0 18px 40px -28px color-mix(in oklab, var(--stage) 70%, transparent);
+  transition: transform .35s cubic-bezier(.2,.7,.2,1), box-shadow .35s;
+}
+.node.r .leafcard { border-radius: 22px 6px 22px 22px; }
+.leafcard::after {
+  content: counter(proj, decimal-leading-zero); position: absolute; top: 8px; right: 16px;
+  font: 700 3.25rem/1 var(--display); letter-spacing: -0.05em; color: transparent;
+  -webkit-text-stroke: 1.2px color-mix(in oklab, var(--stage) 60%, transparent); pointer-events: none;
+}
+.leafcard:hover { transform: translateY(-4px) rotate(-0.4deg); box-shadow: 0 1px 0 var(--line), 0 26px 50px -26px color-mix(in oklab, var(--stage) 85%, transparent); }
+.node.r .leafcard:hover { transform: translateY(-4px) rotate(0.4deg); }
+.leafcard h3 { font: 700 1.35rem/1.2 var(--display); margin: 0; letter-spacing: -0.02em; padding-right: 3.6rem; }
+.leafcard .meta { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; font: 400 0.8125rem/1.4 var(--mono); color: var(--muted); margin: 8px 0 12px; }
+.leafcard .status { font: 500 0.6875rem/1 var(--mono); text-transform: uppercase; letter-spacing: 0.06em; color: var(--stage); border: 1px solid currentColor; padding: 4px 8px; border-radius: 999px; }
+.leafcard p { margin: 0; color: var(--muted); font-size: 0.9875rem; }
+.leafcard .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+.leafcard .tags span { font: 500 0.75rem/1 var(--mono); color: var(--accent); background: var(--accent-soft); padding: 5px 8px; border-radius: 999px; }
+.tree-list .bud { margin-left: 0; padding-top: 92px; }
+.bud span { display: inline-block; font: 700 clamp(1.5rem, 4vw, 2.25rem)/1.1 var(--display); letter-spacing: -0.03em; color: var(--fg); }
+.bud small { display: block; font: 500 0.75rem/1 var(--mono); text-transform: uppercase; letter-spacing: 0.14em; color: var(--blossom); margin-bottom: 10px; }
+.drift { position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: -1; }
+.drift i { position: absolute; top: -40px; width: 18px; height: 10px; border-radius: 0 100% 0 100%; background: var(--leaf-3); opacity: 0; }
+@media (min-width: 900px) {
+  .tree { --tx: 50%; }
+  .tree-list { gap: 20px; }
+  .tree-list > li.node { width: calc(50% - 52px); margin-left: 0; }
+  .tree-list > li.node.r { margin-left: calc(50% + 52px); }
+  .tree-list > li.node + li.node { margin-top: -56px; }
+  .tree-list .stage, .tree-list .bud { text-align: center; }
+  .stage-word { padding-left: 0; text-shadow: 0 0 18px var(--bg), 0 0 6px var(--bg), 0 0 2px var(--bg); }
+  .stage-sub { padding: 7px 12px; display: inline-block; margin-top: 14px; background: var(--surface); border: 1px solid var(--line); border-radius: 999px; }
+  .tree-list .bud { padding-top: 120px; }
+}
+/* Growth animation (JS adds .grow only when the visitor allows motion) */
+.tree.grow .node .leafcard { opacity: 0; transform: translateY(26px) rotate(-2deg) scale(.96); transition: opacity .6s ease, transform .8s cubic-bezier(.2,.8,.2,1.15), box-shadow .35s; }
+.tree.grow .node.r .leafcard { transform: translateY(26px) rotate(2deg) scale(.96); }
+.tree.grow .node.on .leafcard { opacity: 1; transform: none; }
+.tree.grow .node.on .leafcard:hover { transform: translateY(-4px) rotate(-0.4deg); }
+.tree.grow .node.r.on .leafcard:hover { transform: translateY(-4px) rotate(0.4deg); }
+.tree.grow .stage > span, .tree.grow .bud span { opacity: 0; transform: translateY(14px); transition: opacity .6s ease, transform .7s cubic-bezier(.2,.8,.2,1); }
+.tree.grow .stage.on > span, .tree.grow .bud.on span { opacity: 1; transform: none; }
+.tree.grow .stage.on .stage-sub { transition-delay: .12s; }
+.tree.grow .br .branch, .tree.grow .br .twig { stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset .7s ease; }
+.tree.grow .br.on .branch, .tree.grow .br.on .twig { stroke-dashoffset: 0; }
+.tree.grow .br .leaf { transform: scale(0); transition: transform .5s cubic-bezier(.3,1.6,.5,1) .35s; }
+.tree.grow .br.on .leaf { transform: scale(1); }
+.tree.grow .br .flower { transform: scale(0) rotate(-90deg); transition: transform .7s cubic-bezier(.3,1.5,.5,1) .55s; }
+.tree.grow .br.on .flower { transform: none; }
+.br.rustle .leaf { animation: rustle .7s ease; }
+.br.rustle .flower { animation: spin .9s cubic-bezier(.3,1.4,.5,1); }
+@keyframes rustle { 30% { transform: rotate(14deg) scale(1.08); } 65% { transform: rotate(-9deg); } }
+@keyframes spin { from { transform: rotate(0); } to { transform: rotate(72deg); } }
+@media (prefers-reduced-motion: no-preference) {
+  .tree.grow .drift i { animation: fall var(--d, 16s) linear var(--w, 0s) infinite; }
+  @keyframes fall {
+    0% { opacity: 0; transform: translate3d(0, 0, 0) rotate(0); }
+    10% { opacity: .55; }
+    50% { transform: translate3d(var(--x, 40px), calc(var(--h, 2000px) * .5), 0) rotate(200deg); }
+    90% { opacity: .45; }
+    100% { opacity: 0; transform: translate3d(0, var(--h, 2000px), 0) rotate(400deg); }
+  }
+}
+@media print { .tree.grow .node .leafcard, .tree.grow .stage > span, .tree.grow .bud span { opacity: 1; transform: none; } .drift { display: none; } }
+
+/* Seed-to-tree motion graphic. Default (no JS / reduced motion) = the grown tree. */
+:root { --soil: #c9b08f; --soil-dark: #8a6a4a; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --soil: #3a2f26; --soil-dark: #6d5440; } }
+:root[data-theme="dark"] { --soil: #3a2f26; --soil-dark: #6d5440; }
+.scene { position: relative; margin: 0 0 40px; }
+.scene-pin { display: grid; gap: 12px; justify-items: center; }
+.scene-svg { width: min(100%, 460px); height: auto; max-height: 64vh; overflow: visible; }
+.scene-cap { position: relative; min-height: 4.6em; width: 100%; max-width: 40ch; text-align: center; }
+.cap { margin: 0; color: var(--muted); font-size: 1.0625rem; display: none; }
+.cap b { font: 700 1.5rem/1.2 var(--display); color: var(--fg); letter-spacing: -0.02em; display: block; }
+.cap[data-i="3"] { display: block; }
+.scene-hint { display: none; }
+.soil { fill: var(--soil); } .soil-in { fill: var(--soil-dark); opacity: .25; }
+.sun { fill: url(#sunGlow); }
+.sun-a { stop-color: var(--blossom-2); stop-opacity: 1; } .sun-b { stop-color: var(--blossom-2); stop-opacity: .55; } .sun-c { stop-color: var(--blossom); stop-opacity: 0; }
+.grass { fill: none; stroke: var(--leaf-2); stroke-width: 2; stroke-linecap: round; }
+.rootl { fill: none; stroke: var(--soil-dark); stroke-width: 2.2; stroke-linecap: round; stroke-dasharray: 1; }
+.trunkf { fill: var(--bark); }
+.trunkl { fill: none; stroke: color-mix(in oklab, var(--bark) 55%, var(--bg)); stroke-width: 1.5; stroke-linecap: round; }
+.limb { fill: none; stroke: var(--bark); stroke-width: 6; stroke-linecap: round; stroke-dasharray: 1; }
+.blob { fill: var(--accent); opacity: .93; } .blob.l2 { fill: var(--leaf-2); } .blob.l3 { fill: var(--leaf-3); }
+.scene-svg .petal { fill: var(--blossom); } .scene-svg .petal.p2 { fill: var(--blossom-2); } .scene-svg .pistil { fill: #fff6df; }
+#stem { fill: none; stroke: var(--leaf-2); stroke-width: 4; stroke-linecap: round; stroke-dasharray: 1; }
+.pl { fill: var(--accent); } .pl.l2 { fill: var(--leaf-2); } .pl.l3 { fill: var(--leaf-3); }
+#seed path { fill: var(--blossom); stroke: color-mix(in oklab, var(--blossom) 60%, var(--fg)); stroke-width: 1; }
+#plant, #seed { opacity: 0; }
+.scene-svg .blob, .scene-svg .bloom { transform-box: fill-box; transform-origin: center; }
+.scene-svg .pleaf { transform-box: fill-box; transform-origin: 0% 50%; }
+#trunk, #seed, #seedL, #seedR { transform-box: view-box; transform-origin: 200px 422px; }
+/* Scrubbed mode: JS adds .scrub; the scene pins while you scroll through it */
+.scene.scrub { height: 300vh; }
+.scene.scrub .scene-pin { position: sticky; top: 64px; height: calc(100vh - 64px); align-content: center; }
+.scene.scrub .cap { display: block; position: absolute; inset: 0; opacity: 0; transform: translateY(8px); transition: opacity .45s, transform .45s; }
+.scene.scrub .cap.on { opacity: 1; transform: none; }
+.scene.scrub #plant, .scene.scrub #seed { opacity: 1; }
+.scene.scrub .scene-hint { display: block; margin: 0; font: 500 0.75rem/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); transition: opacity .4s; }
+@media (max-width: 899px) { .scene.scrub { height: 260vh; } .scene-svg { max-height: 54vh; } }
+
 /* Experience */
 .timeline { list-style: none; margin: 0; padding: 0; }
 .timeline li { display: grid; gap: 4px 24px; padding-block: 18px; border-top: 1px solid var(--line); }
@@ -311,6 +461,7 @@ section { scroll-margin-top: 72px; }
     <nav class="nav" aria-label="Sections">
       <a href="#about">About</a>
       <a href="#experience">Experience</a>
+      <a href="#projects">Projects</a>
       <a href="#education">Education</a>
       <a href="#skills">Skills</a>
       <a href="#contact">Contact</a>
@@ -430,8 +581,135 @@ section { scroll-margin-top: 72px; }
     </div>
   </section>
 
+  <section id="projects">
+    <div class="label"><b>03</b> · Projects</div>
+    <div>
+      <h2>Things I've <em>grown</em>, branch by branch</h2>
+      <p class="tree-intro">Scroll and watch a seed become a tree. Then follow its branches: every one is a project, from my engineering roots to the ideas I'm building right now.</p>
+      <div class="scene" id="scene">
+        <div class="scene-pin">
+          <div class="scene-cap">
+            <p class="cap" data-i="0"><b>A seed.</b> Curiosity about how things work.</p>
+            <p class="cap" data-i="1"><b>A sprout.</b> Mechanical engineering: designing, testing, building.</p>
+            <p class="cap" data-i="2"><b>A young plant.</b> Economics, policy and research on sustainability transitions.</p>
+            <p class="cap" data-i="3"><b>A tree.</b> Now I grow my own projects. Nine blossoms, nine projects, each on a branch below.</p>
+          </div>
+          <svg class="scene-svg" viewBox="0 0 400 500" role="img" aria-label="Illustration of a tree in bloom, grown from a seed">
+            <defs><radialGradient id="sunGlow"><stop offset="0" class="sun-a"/><stop offset=".45" class="sun-b"/><stop offset="1" class="sun-c"/></radialGradient></defs><circle class="sun" id="sun" cx="300" cy="130" r="70"/>
+            <ellipse class="soil" cx="200" cy="452" rx="175" ry="30"/>
+            <ellipse class="soil-in" cx="200" cy="458" rx="120" ry="16"/>
+            <g id="roots">
+              <path class="rootl" pathLength="1" d="M200 420C196 440 188 455 178 462"/>
+              <path class="rootl" pathLength="1" d="M200 420C204 445 214 458 226 464"/>
+              <path class="rootl" pathLength="1" d="M200 420C200 440 199 460 201 474"/>
+            </g>
+            <path class="grass" d="M60 436l-3-9M60 436l1-11M60 436l4-8"/><path class="grass" d="M100 429l-3-9M100 429l1-11M100 429l4-8"/><path class="grass" d="M145 426l-3-9M145 426l1-11M145 426l4-8"/><path class="grass" d="M255 426l-3-9M255 426l1-11M255 426l4-8"/><path class="grass" d="M300 429l-3-9M300 429l1-11M300 429l4-8"/><path class="grass" d="M340 436l-3-9M340 436l1-11M340 436l4-8"/>
+            <g id="trunk"><path class="trunkf" d="M178 422C186 380 190 330 193 236L207 236C210 330 214 380 222 422Q200 428 178 422Z"/><path class="trunkl" d="M197 410C198 360 199 300 199 250"/></g>
+            <g id="limbs"><path class="limb" pathLength="1" d="M200 300C175 285 140 262 108 232"/><path class="limb" pathLength="1" d="M200 285C228 268 265 245 300 212"/><path class="limb" pathLength="1" d="M199 262C185 230 165 200 140 172"/><path class="limb" pathLength="1" d="M201 255C220 225 240 195 262 165"/><path class="limb" pathLength="1" d="M200 240C200 210 200 180 200 112"/></g>
+            <g id="crown"><circle class="blob l2" cx="108" cy="226" r="30"/><circle class="blob " cx="140" cy="172" r="36"/><circle class="blob l3" cx="200" cy="138" r="42"/><circle class="blob " cx="262" cy="160" r="38"/><circle class="blob l2" cx="302" cy="210" r="32"/><circle class="blob l3" cx="170" cy="205" r="30"/><circle class="blob l2" cx="236" cy="200" r="32"/><circle class="blob " cx="200" cy="186" r="30"/><circle class="blob l3" cx="122" cy="196" r="24"/><circle class="blob l3" cx="286" cy="180" r="26"/><circle class="blob l2" cx="160" cy="132" r="24"/><circle class="blob l2" cx="246" cy="122" r="26"/><circle class="blob " cx="200" cy="100" r="26"/></g>
+            <g id="blooms"><g class="bloom" data-i="0"><ellipse class="petal" cx="133.0" cy="182.0" rx="5" ry="3.6" transform="rotate(0 133.0 182.0)"/><ellipse class="petal p2" cx="129.5" cy="186.8" rx="5" ry="3.6" transform="rotate(72 129.5 186.8)"/><ellipse class="petal" cx="124.0" cy="184.9" rx="5" ry="3.6" transform="rotate(144 124.0 184.9)"/><ellipse class="petal p2" cx="124.0" cy="179.1" rx="5" ry="3.6" transform="rotate(216 124.0 179.1)"/><ellipse class="petal" cx="129.5" cy="177.2" rx="5" ry="3.6" transform="rotate(288 129.5 177.2)"/><circle class="pistil" cx="128" cy="182" r="2.8"/></g><g class="bloom" data-i="1"><ellipse class="petal" cx="197.0" cy="120.0" rx="5" ry="3.6" transform="rotate(0 197.0 120.0)"/><ellipse class="petal p2" cx="193.5" cy="124.8" rx="5" ry="3.6" transform="rotate(72 193.5 124.8)"/><ellipse class="petal" cx="188.0" cy="122.9" rx="5" ry="3.6" transform="rotate(144 188.0 122.9)"/><ellipse class="petal p2" cx="188.0" cy="117.1" rx="5" ry="3.6" transform="rotate(216 188.0 117.1)"/><ellipse class="petal" cx="193.5" cy="115.2" rx="5" ry="3.6" transform="rotate(288 193.5 115.2)"/><circle class="pistil" cx="192" cy="120" r="2.8"/></g><g class="bloom" data-i="2"><ellipse class="petal" cx="257.0" cy="146.0" rx="5" ry="3.6" transform="rotate(0 257.0 146.0)"/><ellipse class="petal p2" cx="253.5" cy="150.8" rx="5" ry="3.6" transform="rotate(72 253.5 150.8)"/><ellipse class="petal" cx="248.0" cy="148.9" rx="5" ry="3.6" transform="rotate(144 248.0 148.9)"/><ellipse class="petal p2" cx="248.0" cy="143.1" rx="5" ry="3.6" transform="rotate(216 248.0 143.1)"/><ellipse class="petal" cx="253.5" cy="141.2" rx="5" ry="3.6" transform="rotate(288 253.5 141.2)"/><circle class="pistil" cx="252" cy="146" r="2.8"/></g><g class="bloom" data-i="3"><ellipse class="petal" cx="305.0" cy="204.0" rx="5" ry="3.6" transform="rotate(0 305.0 204.0)"/><ellipse class="petal p2" cx="301.5" cy="208.8" rx="5" ry="3.6" transform="rotate(72 301.5 208.8)"/><ellipse class="petal" cx="296.0" cy="206.9" rx="5" ry="3.6" transform="rotate(144 296.0 206.9)"/><ellipse class="petal p2" cx="296.0" cy="201.1" rx="5" ry="3.6" transform="rotate(216 296.0 201.1)"/><ellipse class="petal" cx="301.5" cy="199.2" rx="5" ry="3.6" transform="rotate(288 301.5 199.2)"/><circle class="pistil" cx="300" cy="204" r="2.8"/></g><g class="bloom" data-i="4"><ellipse class="petal" cx="113.0" cy="222.0" rx="5" ry="3.6" transform="rotate(0 113.0 222.0)"/><ellipse class="petal p2" cx="109.5" cy="226.8" rx="5" ry="3.6" transform="rotate(72 109.5 226.8)"/><ellipse class="petal" cx="104.0" cy="224.9" rx="5" ry="3.6" transform="rotate(144 104.0 224.9)"/><ellipse class="petal p2" cx="104.0" cy="219.1" rx="5" ry="3.6" transform="rotate(216 104.0 219.1)"/><ellipse class="petal" cx="109.5" cy="217.2" rx="5" ry="3.6" transform="rotate(288 109.5 217.2)"/><circle class="pistil" cx="108" cy="222" r="2.8"/></g><g class="bloom" data-i="5"><ellipse class="petal" cx="227.0" cy="192.0" rx="5" ry="3.6" transform="rotate(0 227.0 192.0)"/><ellipse class="petal p2" cx="223.5" cy="196.8" rx="5" ry="3.6" transform="rotate(72 223.5 196.8)"/><ellipse class="petal" cx="218.0" cy="194.9" rx="5" ry="3.6" transform="rotate(144 218.0 194.9)"/><ellipse class="petal p2" cx="218.0" cy="189.1" rx="5" ry="3.6" transform="rotate(216 218.0 189.1)"/><ellipse class="petal" cx="223.5" cy="187.2" rx="5" ry="3.6" transform="rotate(288 223.5 187.2)"/><circle class="pistil" cx="222" cy="192" r="2.8"/></g><g class="bloom" data-i="6"><ellipse class="petal" cx="167.0" cy="212.0" rx="5" ry="3.6" transform="rotate(0 167.0 212.0)"/><ellipse class="petal p2" cx="163.5" cy="216.8" rx="5" ry="3.6" transform="rotate(72 163.5 216.8)"/><ellipse class="petal" cx="158.0" cy="214.9" rx="5" ry="3.6" transform="rotate(144 158.0 214.9)"/><ellipse class="petal p2" cx="158.0" cy="209.1" rx="5" ry="3.6" transform="rotate(216 158.0 209.1)"/><ellipse class="petal" cx="163.5" cy="207.2" rx="5" ry="3.6" transform="rotate(288 163.5 207.2)"/><circle class="pistil" cx="162" cy="212" r="2.8"/></g><g class="bloom" data-i="7"><ellipse class="petal" cx="281.0" cy="178.0" rx="5" ry="3.6" transform="rotate(0 281.0 178.0)"/><ellipse class="petal p2" cx="277.5" cy="182.8" rx="5" ry="3.6" transform="rotate(72 277.5 182.8)"/><ellipse class="petal" cx="272.0" cy="180.9" rx="5" ry="3.6" transform="rotate(144 272.0 180.9)"/><ellipse class="petal p2" cx="272.0" cy="175.1" rx="5" ry="3.6" transform="rotate(216 272.0 175.1)"/><ellipse class="petal" cx="277.5" cy="173.2" rx="5" ry="3.6" transform="rotate(288 277.5 173.2)"/><circle class="pistil" cx="276" cy="178" r="2.8"/></g><g class="bloom" data-i="8"><ellipse class="petal" cx="210.0" cy="90.0" rx="5" ry="3.6" transform="rotate(0 210.0 90.0)"/><ellipse class="petal p2" cx="206.5" cy="94.8" rx="5" ry="3.6" transform="rotate(72 206.5 94.8)"/><ellipse class="petal" cx="201.0" cy="92.9" rx="5" ry="3.6" transform="rotate(144 201.0 92.9)"/><ellipse class="petal p2" cx="201.0" cy="87.1" rx="5" ry="3.6" transform="rotate(216 201.0 87.1)"/><ellipse class="petal" cx="206.5" cy="85.2" rx="5" ry="3.6" transform="rotate(288 206.5 85.2)"/><circle class="pistil" cx="205" cy="90" r="2.8"/></g></g>
+            <g id="plant">
+              <path id="stem" pathLength="1" d="M200 418C197 395 204 370 199 345C195 320 203 300 200 272"/>
+              <g class="pleaf" data-a=".2"><g transform="translate(200 393) rotate(-28) scale(0.8)"><path class="pl l3" d="M0 0C6-12 22-14 30-4C22 6 8 6 0 0Z"/></g></g>
+              <g class="pleaf" data-a=".2"><g transform="translate(200 393) rotate(208) scale(0.8)"><path class="pl l3" d="M0 0C6-12 22-14 30-4C22 6 8 6 0 0Z"/></g></g>
+              <g class="pleaf" data-a=".31"><g transform="translate(201 362) rotate(-35) scale(1)"><path class="pl " d="M0 0C6-12 22-14 30-4C22 6 8 6 0 0Z"/></g></g>
+              <g class="pleaf" data-a=".37"><g transform="translate(198 332) rotate(212) scale(1)"><path class="pl l2" d="M0 0C6-12 22-14 30-4C22 6 8 6 0 0Z"/></g></g>
+              <g class="pleaf" data-a=".43"><g transform="translate(201 302) rotate(-38) scale(1)"><path class="pl l2" d="M0 0C6-12 22-14 30-4C22 6 8 6 0 0Z"/></g></g>
+              <g class="pleaf" data-a=".48"><g transform="translate(200 276) rotate(-70) scale(0.7)"><path class="pl " d="M0 0C6-12 22-14 30-4C22 6 8 6 0 0Z"/></g></g>
+              <g class="pleaf" data-a=".48"><g transform="translate(200 276) rotate(250) scale(0.7)"><path class="pl l3" d="M0 0C6-12 22-14 30-4C22 6 8 6 0 0Z"/></g></g>
+            </g>
+            <g id="seed"><path id="seedL" d="M200 402C190 402 188 418 200 422Z"/><path id="seedR" d="M200 402C210 402 212 418 200 422Z"/></g>
+          </svg>
+          <p class="scene-hint" aria-hidden="true">Scroll to grow ↓</p>
+        </div>
+      </div>
+      <div class="tree" id="tree">
+        <div class="drift" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        <svg class="tree-svg" aria-hidden="true" focusable="false"></svg>
+        <ol class="tree-list" aria-label="Projects">
+        <li class="stage s1"><span class="stage-word">Roots</span><span class="stage-sub">Engineering</span></li>
+        <li class="node l s1">
+          <article class="leafcard">
+            <h3>Hydrogen-generation prototype</h3>
+            <p class="meta"><span>Personal side project</span></p>
+            <p>Designed and built a working steel-plate hydrogen-generation system, from concept through construction to practical testing of gas output.</p>
+            <div class="tags"><span>Mechanical design</span><span>Prototyping</span><span>Testing</span></div>
+          </article>
+        </li>
+        <li class="node r s1">
+          <article class="leafcard">
+            <h3>GPT-based research assistant</h3>
+            <p class="meta"><span>Research tool</span></p>
+            <p>Built a GPT-based assistant that identifies start-ups and organises their contact information by country and city, to speed up market and partner research.</p>
+            <div class="tags"><span>AI tools</span><span>Market research</span><span>Automation</span></div>
+          </article>
+        </li>
+        <li class="stage s2"><span class="stage-word">Growth</span><span class="stage-sub">Research and study</span></li>
+        <li class="node l s2">
+          <article class="leafcard">
+            <h3>Zon op Haarlemmermeer: marketing a citizen solar project</h3>
+            <p class="meta"><span>2025 · Team case study, VU Amsterdam</span></p>
+            <p>A new energy cooperative needed to sell 70% of the shares in a roughly 400-panel solar roof on a municipal building before it could be built, and had sold 20%. Our team analysed the barriers, mapped the stakeholders, built a value-exchange model, and proposed a marketing campaign, buy-in strategy and co-creation plan.</p>
+            <div class="tags"><span>Energy transition</span><span>Stakeholder mapping</span><span>Marketing strategy</span><span>Community energy</span></div>
+          </article>
+        </li>
+        <li class="node r s2">
+          <article class="leafcard">
+            <h3>From Linear to Circular: circular-economy thesis</h3>
+            <p class="meta"><span>M.A. thesis, with Duisburg Business &amp; Innovation</span></p>
+            <p>How policy, institutions, incentives and cooperation shape the move from linear to circular production in post-industrial Duisburg, with Amsterdam and Singapore as comparative cases.</p>
+            <div class="tags"><span>Circular economy</span><span>Policy analysis</span><span>Economic resilience</span><span>Case study</span></div>
+          </article>
+        </li>
+        <li class="stage s3"><span class="stage-word">New shoots</span><span class="stage-sub">Building now</span></li>
+        <li class="node l s3">
+          <article class="leafcard">
+            <h3>This website</h3>
+            <p class="meta"><span>2026</span><span class="status">Live</span></p>
+            <p>My personal site, built as plain HTML and hosted free on GitHub Pages. Set up search-engine and AI-search visibility (structured data, sitemap, Google Search Console and Bing) and privacy-friendly, cookieless visitor statistics.</p>
+            <div class="tags"><span>HTML/CSS</span><span>SEO</span><span>Analytics</span></div>
+          </article>
+        </li>
+        <li class="node r s3">
+          <article class="leafcard">
+            <h3>Meetout</h3>
+            <p class="meta"><span>2026</span><span class="status">In development</span></p>
+            <p>A mobile-first app for meeting new people around Oss through small, public hangouts: post a plan, others ask to join, the host accepts, and the group chats and meets. After meeting, people leave references, which builds trust over time. Built with safety in mind (18+ check, public meeting spots); the launch version runs on Firebase with an Android app.</p>
+            <div class="tags"><span>Product design</span><span>React</span><span>TypeScript</span><span>Firebase</span><span>Android</span></div>
+          </article>
+        </li>
+        <li class="node l s3">
+          <article class="leafcard">
+            <h3>Dogout</h3>
+            <p class="meta"><span>2026</span><span class="status">In development</span></p>
+            <p>Dog play dates in Noord-Brabant, starting in Oss. Owners make a profile for their dog, get matched with dogs of similar energy, size and play style, and plan open or private play dates. Built by reusing the Meetout codebase, in Dutch and English.</p>
+            <div class="tags"><span>Product design</span><span>React</span><span>Firebase</span><span>Bilingual NL/EN</span></div>
+          </article>
+        </li>
+        <li class="node r s3">
+          <article class="leafcard">
+            <h3>Tend</h3>
+            <p class="meta"><span>2026</span><span class="status">Prototype</span></p>
+            <p>A no-shame life game for adults with ADHD, informed by CBT techniques: small real-life steps help your avatar grow, and missing a day never costs you anything. A playtest prototype, run like a small company with AI agents in roles from product and design to privacy, marketing and finance.</p>
+            <div class="tags"><span>Game design</span><span>Behaviour change</span><span>JavaScript</span><span>AI agents</span></div>
+          </article>
+        </li>
+        <li class="node l s3">
+          <article class="leafcard">
+            <h3>AI workflow automation</h3>
+            <p class="meta"><span>2026</span></p>
+            <p>Python pipelines that check online sources on a schedule, filter and score new items with AI, draft tailored documents, and stop for a one-tap human approval before anything is sent. Plus a review loop in which two AI models check each other's work, backed by automated regression tests and an audit of every command run.</p>
+            <div class="tags"><span>Python</span><span>AI agents</span><span>Automation</span><span>Testing</span></div>
+          </article>
+        </li>
+        <li class="bud"><span><small>Next season</small>Innovation &amp; sustainability</span></li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
   <section id="volunteering">
-    <div class="label"><b>03</b> · Volunteering</div>
+    <div class="label"><b>04</b> · Volunteering</div>
     <div>
       <h2>Organising the 8th International PPE Conference</h2>
       <div class="vol">
@@ -457,7 +735,7 @@ section { scroll-margin-top: 72px; }
   </section>
 
   <section id="education">
-    <div class="label"><b>04</b> · Education</div>
+    <div class="label"><b>05</b> · Education</div>
     <div>
       <h2>Education: M.A. PPE and B.Sc. Mechanical Engineering</h2>
       <ul class="timeline">
@@ -484,7 +762,7 @@ section { scroll-margin-top: 72px; }
   </section>
 
   <section id="skills">
-    <div class="label"><b>05</b> · Skills</div>
+    <div class="label"><b>06</b> · Skills</div>
     <div>
       <h2>Skills and languages</h2>
       <p class="group group-first">From my M.A. in Philosophy, Politics &amp; Economics</p>
@@ -512,7 +790,7 @@ section { scroll-margin-top: 72px; }
   </section>
 
   <section id="contact">
-    <div class="label"><b>06</b> · Contact</div>
+    <div class="label"><b>07</b> · Contact</div>
     <div>
       <h2>Contact Mohammadhossein Mohammadi</h2>
       <div class="contact-row">
@@ -582,6 +860,189 @@ section { scroll-margin-top: 72px; }
     function fallback() { var r = document.createRange(); r.selectNodeContents(email); var s = getSelection(); s.removeAllRanges(); s.addRange(r); copy.textContent = 'Press Ctrl/Cmd+C'; }
     try { navigator.clipboard.writeText(text).then(done, fallback); } catch (e) { fallback(); }
   });
+
+  // Project tree: draw trunk, vines, branches, leaves and flowers from the real card positions; grow them with scroll.
+  (function () {
+    var tree = document.getElementById('tree');
+    if (!tree || !window.SVGElement) return;
+    var svg = tree.querySelector('.tree-svg');
+    var items = [].slice.call(tree.querySelectorAll('.tree-list > li'));
+    var NS = 'http://www.w3.org/2000/svg';
+    var still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var grown = 0, ticking = false, H = 1, strands = [], tip, tipPath, tipL = 0, parts = [];
+    function el(n, a, parent) { var e = document.createElementNS(NS, n); for (var k in a) e.setAttribute(k, a[k]); if (parent) parent.appendChild(e); return e; }
+    var n = 0; function rnd() { n = (n * 9301 + 49297) % 233280; return n / 233280; } // steady pseudo-random, same every build
+    function leaf(g, x, y, ang, size, cls) {
+      var w = el('g', { transform: 'translate(' + x.toFixed(1) + ' ' + y.toFixed(1) + ') rotate(' + ang.toFixed(0) + ') scale(' + size + ')' }, g);
+      el('path', { 'class': 'leaf ' + cls, d: 'M0 0C5-8 15-8 20 0C15 8 5 8 0 0Z' }, w);
+      el('path', { 'class': 'vein', d: 'M2 0L17 0' }, w);
+    }
+    function flower(g, x, y, r) {
+      var f = el('g', { 'class': 'flower' }, g);
+      for (var i = 0; i < 5; i++) {
+        var a = i * 72 * Math.PI / 180;
+        el('ellipse', { 'class': 'petal' + (i % 2 ? ' p2' : ''), cx: (x + Math.cos(a) * r).toFixed(1), cy: (y + Math.sin(a) * r).toFixed(1), rx: r, ry: r * 0.72,
+          transform: 'rotate(' + (i * 72) + ' ' + (x + Math.cos(a) * r).toFixed(1) + ' ' + (y + Math.sin(a) * r).toFixed(1) + ')' }, f);
+      }
+      el('circle', { 'class': 'pistil', cx: x, cy: y, r: r * 0.55 }, f);
+    }
+    function build() {
+      n = 7;
+      var W = tree.clientWidth; H = tree.clientHeight || 1;
+      var wide = getComputedStyle(tree).getPropertyValue('--tx').trim() === '50%';
+      var tx = wide ? W / 2 : 16, amp = wide ? 9 : 3;
+      function xAt(y) { return tx + amp * Math.sin(y / 90); }
+      tree.style.setProperty('--h', H + 'px');
+      svg.textContent = ''; parts = []; strands = [];
+      svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
+      var bud = items[items.length - 1], end = bud.offsetTop + (wide ? 70 : 56);
+      function strand(cls, off, ph, f) {
+        var d = '';
+        for (var y = 0; y <= end; y += 12) {
+          var x = xAt(y) + off * Math.sin(y / f + ph);
+          d += (y ? 'L' : 'M') + x.toFixed(1) + ' ' + y;
+        }
+        var p = el('path', { d: d, 'class': cls, pathLength: 1, 'stroke-dasharray': 1, 'stroke-dashoffset': 1 }, svg);
+        strands.push(p); return p;
+      }
+      tipPath = strand('trunk', 0, 0, 1);
+      strand('trunk-hi', -2, 0, 1e9);
+      strand('vine', 6, 0, 38); strand('vine b', 6, Math.PI, 44);
+      tipL = tipPath.getTotalLength();
+      var nodeYs = [];
+      items.forEach(function (li) {
+        var g = el('g', { 'class': 'br' }, svg), top = li.offsetTop, y;
+        if (li.classList.contains('node')) {
+          var edge = (wide && li.offsetLeft < tx) ? li.offsetLeft + li.offsetWidth : li.offsetLeft;
+          var dir = edge > tx ? 1 : -1, yEnd = top + 34, y0 = yEnd + 46, x0 = xAt(y0);
+          var path = el('path', { 'class': 'branch', pathLength: 1,
+            d: 'M' + x0.toFixed(1) + ' ' + y0 + 'C' + (x0 + dir * 22).toFixed(1) + ' ' + (y0 + 4) + ' ' + (edge - dir * 30).toFixed(1) + ' ' + (yEnd + 2) + ' ' + (edge - dir * 6).toFixed(1) + ' ' + yEnd }, g);
+          var L = path.getTotalLength();
+          [[0.3, -1, 'l2'], [0.48, 1, ''], [0.66, -1, 'l3'], [0.82, 1, 'l2']].forEach(function (f) {
+            var pt = path.getPointAtLength(L * f[0]);
+            var ang = f[1] < 0 ? (dir > 0 ? -50 : -130) : (dir > 0 ? 40 : 140);
+            leaf(g, pt.x, pt.y, ang + (rnd() * 20 - 10), 0.75 + rnd() * 0.45, f[2]);
+          });
+          if (!wide) flower(g, edge - dir * 6, yEnd, 4.2); else flower(g, edge - dir * 6, yEnd, 5.2);
+          y = y0; nodeYs.push(y0);
+        } else if (li.classList.contains('bud')) {
+          flower(g, xAt(end), end, wide ? 13 : 10);
+          leaf(g, xAt(end) - 4, end + 6, 150, 1.3, 'l2'); leaf(g, xAt(end) + 4, end + 6, 30, 1.3, '');
+          y = end;
+        } else {
+          y = top + li.offsetHeight / 2;
+        }
+        parts.push({ li: li, g: g, at: y / H });
+      });
+      // twigs with leaves along the trunk, away from the project branches
+      for (var ty = 90, side = 1; ty < end - 60; ty += 70 + rnd() * 50, side = -side) {
+        if (nodeYs.some(function (v) { return Math.abs(v - ty) < 50; })) continue;
+        var g = el('g', { 'class': 'br' }, svg), x = xAt(ty), len = wide ? 18 + rnd() * 16 : 8 + rnd() * 6;
+        var tw = el('path', { 'class': 'twig', pathLength: 1, d: 'M' + x.toFixed(1) + ' ' + ty + 'q' + (side * len * 0.6).toFixed(1) + ' -2 ' + (side * len).toFixed(1) + ' -' + (8 + rnd() * 8).toFixed(1) }, g);
+        var tp = tw.getPointAtLength(tw.getTotalLength());
+        leaf(g, tp.x, tp.y, side > 0 ? -25 : -155, 0.6 + rnd() * 0.4, ['', 'l2', 'l3'][Math.floor(rnd() * 3)]);
+        if (rnd() > 0.72) flower(g, tp.x + side * 4, tp.y - 6, 3);
+        parts.push({ li: null, g: g, at: ty / H });
+      }
+      tip = el('circle', { 'class': 'tip', r: 5.5 }, svg);
+      [].forEach.call(tree.querySelectorAll('.drift i'), function (d, i) {
+        d.style.left = (8 + rnd() * 84) + '%';
+        d.style.setProperty('--d', (14 + rnd() * 12).toFixed(1) + 's');
+        d.style.setProperty('--w', (-rnd() * 20).toFixed(1) + 's');
+        d.style.setProperty('--x', ((rnd() - 0.5) * 160).toFixed(0) + 'px');
+        if (i % 3 === 1) d.style.background = 'var(--blossom)';
+        if (i % 3 === 2) d.style.background = 'var(--accent)';
+      });
+      tree.classList.add('ready');
+      if (still) grown = 1;
+      paint();
+    }
+    function paint() {
+      ticking = false;
+      if (!still) {
+        var r = tree.getBoundingClientRect();
+        var p = (innerHeight * 0.7 - r.top) / r.height;
+        grown = Math.max(grown, Math.min(1, Math.max(0, p)));
+        if (r.bottom < innerHeight * 0.7) grown = 1;
+      }
+      var lengthShare = Math.min(1, grown * H / (tipL || 1));
+      strands.forEach(function (p) { p.style.strokeDashoffset = 1 - lengthShare; });
+      var pt = tipPath.getPointAtLength(tipL * lengthShare);
+      tip.setAttribute('cx', pt.x); tip.setAttribute('cy', pt.y);
+      tip.style.opacity = (still || lengthShare <= 0.01 || lengthShare >= 1) ? 0 : 1;
+      parts.forEach(function (q) {
+        var on = q.at <= grown + 0.002;
+        if (q.li) q.li.classList.toggle('on', on);
+        q.g.classList.toggle('on', on);
+      });
+    }
+    function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(paint); } }
+    if (!still) tree.classList.add('grow');
+    build();
+    addEventListener('scroll', onScroll, { passive: true });
+    tree.addEventListener('mouseover', function (e) {
+      var li = e.target.closest && e.target.closest('.node');
+      if (!li || still) return;
+      var q = parts.filter(function (x) { return x.li === li; })[0];
+      if (!q || q.g.classList.contains('rustle')) return;
+      q.g.classList.add('rustle'); setTimeout(function () { q.g.classList.remove('rustle'); }, 900);
+    });
+    var t, lastW = tree.clientWidth;
+    function rebuild() { clearTimeout(t); t = setTimeout(build, 150); }
+    if (window.ResizeObserver) new ResizeObserver(rebuild).observe(tree); else addEventListener('resize', rebuild);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(build);
+  })();
+
+  // Seed-to-tree motion graphic, scrubbed by scroll (skipped for reduced motion: the grown tree shows).
+  (function () {
+    var sc = document.getElementById('scene');
+    if (!sc || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    sc.classList.add('scrub');
+    function q(s) { return sc.querySelector(s); }
+    function qa(s) { return [].slice.call(sc.querySelectorAll(s)); }
+    var seed = q('#seed'), sL = q('#seedL'), sR = q('#seedR'), stem = q('#stem'), plant = q('#plant'), trunk = q('#trunk'), sun = q('#sun');
+    var roots = qa('.rootl'), pleaves = qa('.pleaf'), limbs = qa('.limb'), blobs = qa('.blob'), blooms = qa('.bloom'), caps = qa('.cap'), hint = q('.scene-hint');
+    function k(t, a, b) { return Math.min(1, Math.max(0, (t - a) / (b - a))); }
+    function out(x) { return 1 - Math.pow(1 - x, 3); }
+    function pop(x) { if (x <= 0) return 0; var c = 2.2; return 1 + (c + 1) * Math.pow(x - 1, 3) + c * Math.pow(x - 1, 2); }
+    var last = -1, ticking = false;
+    function frame() {
+      ticking = false;
+      var r = sc.getBoundingClientRect();
+      if (last >= 0 && (r.bottom < -50 || r.top > innerHeight + 50)) return;
+      var t = Math.min(1, Math.max(0, -r.top / Math.max(1, r.height - innerHeight)));
+      if (Math.abs(t - last) < 0.0005) return; last = t;
+      // 1. the seed falls and lands
+      var drop = out(k(t, 0, 0.08));
+      seed.style.transform = 'translateY(' + ((1 - drop) * -320).toFixed(1) + 'px)';
+      // 2. it cracks open and roots reach down
+      var crack = out(k(t, 0.1, 0.2));
+      sL.style.transform = 'translate(' + (-6 * crack) + 'px,' + (2 * crack) + 'px) rotate(' + (-28 * crack) + 'deg)';
+      sR.style.transform = 'translate(' + (6 * crack) + 'px,' + (2 * crack) + 'px) rotate(' + (28 * crack) + 'deg)';
+      seed.style.opacity = 1 - k(t, 0.3, 0.42);
+      roots.forEach(function (p, i) { var d = out(k(t, 0.1 + i * 0.03, 0.32 + i * 0.03)); p.style.strokeDashoffset = 1 - d; p.style.opacity = d > 0 ? 1 : 0; });
+      // 3. a sprout, then a young plant
+      var sd = out(k(t, 0.16, 0.5)); stem.style.strokeDashoffset = 1 - sd; stem.style.opacity = sd > 0 ? 1 : 0;
+      pleaves.forEach(function (g) { var a = +g.getAttribute('data-a'); g.style.transform = 'scale(' + pop(k(t, a, a + 0.07)).toFixed(3) + ')'; });
+      plant.style.opacity = 1 - k(t, 0.6, 0.7);
+      // 4. it becomes a tree: trunk thickens, limbs grow, crown fills, blossoms open
+      var tr = out(k(t, 0.52, 0.72));
+      trunk.style.transform = 'scale(' + (0.12 + 0.88 * tr).toFixed(3) + ',' + (0.2 + 0.8 * tr).toFixed(3) + ')';
+      trunk.style.opacity = Math.min(1, tr * 3);
+      limbs.forEach(function (p, i) { var d = out(k(t, 0.64 + i * 0.025, 0.76 + i * 0.025)); p.style.strokeDashoffset = 1 - d; p.style.opacity = d > 0 ? 1 : 0; });
+      sun.style.transform = 'translateY(' + ((1 - out(k(t, 0.3, 0.9))) * 180).toFixed(1) + 'px)'; sun.style.opacity = (0.8 * k(t, 0.3, 0.6)).toFixed(2);
+      blobs.forEach(function (c, i) { c.style.transform = 'scale(' + pop(k(t, 0.72 + i * 0.012, 0.8 + i * 0.012)).toFixed(3) + ')'; });
+      blooms.forEach(function (f, i) { var b = k(t, 0.86 + i * 0.012, 0.92 + i * 0.012); f.style.transform = 'scale(' + pop(b).toFixed(3) + ') rotate(' + ((1 - b) * -90).toFixed(0) + 'deg)'; });
+      // captions
+      var stage = t < 0.16 ? 0 : t < 0.5 ? 1 : t < 0.7 ? 2 : 3;
+      caps.forEach(function (c, i) { c.classList.toggle('on', i === stage); });
+      hint.style.opacity = 1 - k(t, 0.02, 0.1);
+    }
+    function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(frame); } }
+    addEventListener('scroll', onScroll, { passive: true });
+    addEventListener('resize', function () { last = -1; onScroll(); });
+    frame();
+  })();
 })();
 </script>
 <!-- Visitor stats: GoatCounter (no cookies, no personal data, so no cookie banner is needed).
