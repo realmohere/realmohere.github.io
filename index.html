@@ -33,7 +33,7 @@
   "name": "Mohammadhossein Mohammadi | Economics Graduate (M.A. PPE) & Mechanical Engineer",
   "inLanguage": "en",
   "dateCreated": "2026-11-19T16:00:00+01:00",
-  "dateModified": "2026-11-22T21:30:00+01:00",
+  "dateModified": "2026-11-23T09:00:00+01:00",
   "mainEntity": {
     "@type": "Person",
     "@id": "https://momohammadi.nl/#mo",
@@ -107,6 +107,8 @@ body {
 a { color: inherit; text-decoration-color: var(--accent); text-underline-offset: 3px; }
 a:hover { color: var(--accent); }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
+.skip { position: absolute; left: 12px; top: -60px; z-index: 100; padding: 10px 16px; border-radius: 8px; background: var(--accent); color: var(--bg); font-weight: 600; text-decoration: none; }
+.skip:focus { top: 12px; color: var(--bg); }
 
 .wrap {
   max-width: 1040px; margin: 0 auto;
@@ -381,6 +383,7 @@ section { scroll-margin-top: 72px; }
 .card .avatar { width: 64px; height: 64px; border-radius: 50%; display: grid; place-items: center; background: var(--accent); color: var(--bg); font: 700 1.375rem/1 var(--display); letter-spacing: -0.02em; }
 .card { padding: 0; overflow: hidden; }
 .photo { margin: 0; }
+picture { display: block; }
 .photo img { display: block; width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; }
 .photo figcaption { font: 400 0.75rem/1.4 var(--mono); color: var(--muted); padding: 10px 20px 0; }
 .card dl { padding: 0 20px 20px; margin: 14px 0 0; display: grid; gap: 12px; }
@@ -453,6 +456,7 @@ section { scroll-margin-top: 72px; }
 </style>
 </head>
 <body>
+<a class="skip" href="#main">Skip to content</a>
 <div class="wrap" id="top">
 
   <header class="top">
@@ -473,6 +477,7 @@ section { scroll-margin-top: 72px; }
     </div>
   </header>
 
+  <main id="main">
   <div class="hero">
     <div class="hero-grid">
     <div>
@@ -484,7 +489,7 @@ section { scroll-margin-top: 72px; }
     </div>
     </div>
     <aside class="card" aria-label="At a glance">
-      <figure class="photo"><img src="mo.jpg" width="560" height="700" alt="Mohammadhossein Mohammadi at the M.A. Philosophy, Politics &amp; Economics graduation, Witten/Herdecke University, holding a diploma and flowers"><figcaption>M.A. graduation, Witten/Herdecke University</figcaption></figure>
+      <figure class="photo"><picture><source srcset="mo.webp" type="image/webp"><img src="mo.jpg" width="560" height="700" fetchpriority="high" alt="Mohammadhossein Mohammadi at the M.A. Philosophy, Politics &amp; Economics graduation, Witten/Herdecke University, holding a diploma and flowers"></picture><figcaption>M.A. graduation, Witten/Herdecke University</figcaption></figure>
       <dl>
         <div><dt>Focus</dt><dd>Innovation, sustainability, policy &amp; strategy, engineering</dd></div>
         <div><dt>Based in</dt><dd>'s-Hertogenbosch area, NL</dd></div>
@@ -714,7 +719,7 @@ section { scroll-margin-top: 72px; }
       <h2>Organising the 8th International PPE Conference</h2>
       <div class="vol">
         <figure class="vol-photo">
-          <img src="ppe-conference-team.jpg" width="1100" height="1045" loading="lazy" alt="Mohammadhossein Mohammadi with fellow members of the organising team on stage at the 8th International PPE Conference, Witten/Herdecke University, 2024">
+          <picture><source srcset="ppe-conference-team.webp" type="image/webp"><img src="ppe-conference-team.jpg" width="1100" height="1045" loading="lazy" decoding="async" alt="Mohammadhossein Mohammadi with fellow members of the organising team on stage at the 8th International PPE Conference, Witten/Herdecke University, 2024"></picture>
           <figcaption>With the organising team at the 8th International PPE Conference, Witten/Herdecke University, 2024</figcaption>
         </figure>
         <div class="vol-text">
@@ -803,6 +808,7 @@ section { scroll-margin-top: 72px; }
       </ul>
     </div>
   </section>
+  </main>
 
   <footer>
     <span>© <span id="yr">2026</span> Mohammadhossein Mohammadi</span>
