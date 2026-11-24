@@ -22,6 +22,8 @@
 
 ## Projects
 
+Each project has its own page under https://momohammadi.nl/projects/ (listed in https://momohammadi.nl/sitemap.xml).
+
 Building now:
 - Meetout (2026, in development): mobile-first app for meeting new people around Oss through small public hangouts, with join requests, group chat and references after meeting. React, TypeScript, Firebase, Android.
 - Dogout (2026, in development): dog play dates in Noord-Brabant, starting in Oss; matches dogs by energy, size and play style. Built from the Meetout codebase, Dutch and English.

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="800" height="450">
+<rect width="800" height="450" fill="#ECE6D8"/>
+<g fill="none" stroke="#183D30" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+<path d="M60 380H740" stroke="#78916B" stroke-width="1.5" opacity=".6"/>
+
+<path d="M120 340c120-40 200 40 320 0s160-80 240-60" stroke="#78916B" stroke-width="2.5" stroke-dasharray="2 10"/>
+<g fill="#ECE6D8">
+<g transform="translate(200 250) rotate(-15)"><ellipse cx="0" cy="18" rx="22" ry="18"/><circle cx="-24" cy="-12" r="9"/><circle cx="-8" cy="-24" r="9"/><circle cx="10" cy="-24" r="9"/><circle cx="26" cy="-12" r="9"/></g>
+<g transform="translate(360 180) rotate(10)"><ellipse cx="0" cy="18" rx="22" ry="18"/><circle cx="-24" cy="-12" r="9"/><circle cx="-8" cy="-24" r="9"/><circle cx="10" cy="-24" r="9"/><circle cx="26" cy="-12" r="9"/></g>
+<g transform="translate(500 250) rotate(-8)"><ellipse cx="0" cy="18" rx="22" ry="18"/><circle cx="-24" cy="-12" r="9"/><circle cx="-8" cy="-24" r="9"/><circle cx="10" cy="-24" r="9"/><circle cx="26" cy="-12" r="9"/></g></g>
+<circle cx="640" cy="200" r="34" stroke="#BA7355"/><path d="M610 186c20 10 40 10 60 0M610 214c20-10 40-10 60 0" stroke="#BA7355" stroke-width="2.5"/>
+</g></svg>

@@ -2,8 +2,19 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://momohammadi.nl/</loc>
-    <lastmod>2026-11-23</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <image:image><image:loc>https://momohammadi.nl/mo.jpg</image:loc></image:image>
     <image:image><image:loc>https://momohammadi.nl/ppe-conference-team.jpg</image:loc></image:image>
   </url>
+  <!-- PROJECTS:START -->
+  <url><loc>https://momohammadi.nl/projects/hydrogen-prototype.html</loc></url>
+  <url><loc>https://momohammadi.nl/projects/research-assistant.html</loc></url>
+  <url><loc>https://momohammadi.nl/projects/zon-op-haarlemmermeer.html</loc></url>
+  <url><loc>https://momohammadi.nl/projects/linear-to-circular-thesis.html</loc></url>
+  <url><loc>https://momohammadi.nl/projects/personal-website.html</loc></url>
+  <url><loc>https://momohammadi.nl/projects/meetout.html</loc></url>
+  <url><loc>https://momohammadi.nl/projects/dogout.html</loc></url>
+  <url><loc>https://momohammadi.nl/projects/tend.html</loc></url>
+  <url><loc>https://momohammadi.nl/projects/ai-workflow-automation.html</loc></url>
+  <!-- PROJECTS:END -->
 </urlset>
