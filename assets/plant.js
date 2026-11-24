@@ -85,9 +85,19 @@
     return 'M' + L.join('L') + 'L' + R.reverse().join('L') + 'Z';
   }
 
+  function offset(pts, d0, d1) { // the same curve shifted sideways, by d0 at the start and d1 at the end
+    var n = pts.length, out = [];
+    for (var i = 0; i < n; i++) {
+      var a = pts[Math.max(0, i - 1)], b = pts[Math.min(n - 1, i + 1)];
+      var dx = b.x - a.x, dy = b.y - a.y, d = Math.hypot(dx, dy) || 1, o = d0 + (d1 - d0) * pts[i].l / pts.L;
+      out.push({ x: pts[i].x - dy / d * o, y: pts[i].y + dx / d * o });
+    }
+    return measure(out);
+  }
+
   // ---- Scene state (rebuilt on resize) ----
   var W, H, g, mobile, cx, dxFinal, topY, navH, sE, defs, cam, maskN;
-  var seed, rootMain, rootlets, stem, shootFrac, cotys, stemLeaves, branches, finaleH;
+  var apex, stemW, plantShadow, seed, rootMain, rootlets, stem, shootFrac, cotys, stemLeaves, branches, finaleH;
   var trackTop = 0, Hs = 1, uD = -1, raf = 0, lastCam = '';
 
   function grower(parent, pts, w0, w1, cls) { // tapered shape revealed along its length through a stroked mask
@@ -95,7 +105,13 @@
     var m = el('mask', { id: id, maskUnits: 'userSpaceOnUse', x: -W, y: -H, width: W * 3, height: H * 3 }, defs);
     var mp = el('path', { d: line(pts), fill: 'none', stroke: '#fff', 'stroke-width': Math.max(w0, w1) + 6,
       'stroke-linecap': 'round', 'stroke-linejoin': 'round', pathLength: 1, 'stroke-dasharray': '1 2', 'stroke-dashoffset': 1 }, m);
-    var shape = el('path', { d: taper(pts, w0, w1), 'class': cls, mask: 'url(#' + id + ')' }, parent);
+    var shape = el('g', { mask: 'url(#' + id + ')' }, parent);
+    el('path', { d: taper(pts, w0, w1), 'class': cls }, shape);
+    if (cls === 'stem' || cls === 'branch') {
+      // a lighter band on one side and a darker one on the other make it read as round
+      el('path', { d: taper(offset(pts, -0.22 * w0, -0.22 * w1), w0 * 0.3, w1 * 0.25), 'class': 'hl' }, shape);
+      el('path', { d: taper(offset(pts, 0.3 * w0, 0.3 * w1), w0 * 0.28, w1 * 0.2), 'class': 'sh' }, shape);
+    }
     shape.style.visibility = 'hidden';
     return { pts: pts, p: -1, set: function (p) {
       if (Math.abs(p - this.p) < 1e-4) return; this.p = p;
@@ -103,27 +119,66 @@
       shape.style.visibility = p > 0.003 ? 'visible' : 'hidden';
     } };
   }
-  function leaf(parent, x, y, ang, len, fold, cls, ratio) { // unfolds from its attachment point
-    var w = len * (ratio || 0.34), gEl = el('g', {}, parent);
-    el('path', { 'class': 'leaf' + (cls ? ' ' + cls : ''), d: 'M0 0C' + f1(len * .2) + ' ' + f1(-w * .95) + ' ' + f1(len * .66) + ' ' + f1(-w * 1.05) + ' ' + f1(len) + ' 0C' + f1(len * .64) + ' ' + f1(w * .82) + ' ' + f1(len * .2) + ' ' + f1(w * .78) + ' 0 0Z' }, gEl);
-    el('path', { 'class': 'rib', d: 'M' + f1(len * .08) + ' 0Q' + f1(len * .5) + ' ' + f1(-w * .1) + ' ' + f1(len * .88) + ' 0' }, gEl);
+  function leaf(parent, x, y, ang, len, fold, cls, ratio) { // stalk, two-tone blade, midrib and veins; unfolds from its attachment point
+    var w = len * (ratio || 0.26), pl = len * 0.16, L = len - pl, b = pl, gEl = el('g', {}, parent);
+    var tx = b + L, ty = -w * 0.14, v = cls === 'b' ? '2' : '';
+    var rib = 'M' + f1(b) + ' 0Q' + f1(b + L * 0.5) + ' ' + f1(-w * 0.03) + ' ' + f1(tx) + ' ' + f1(ty);
+    el('path', { 'class': 'petiole', d: 'M0 0Q' + f1(pl * 0.5) + ' ' + f1(w * 0.06) + ' ' + f1(b) + ' 0' }, gEl);
+    el('path', { 'class': 'leaf-l' + v, d: 'M' + f1(b) + ' 0C' + f1(b + L * 0.16) + ' ' + f1(w * 0.95) + ' ' + f1(b + L * 0.68) + ' ' + f1(w * 0.8) + ' ' + f1(tx) + ' ' + f1(ty) + 'Q' + f1(b + L * 0.5) + ' ' + f1(-w * 0.03) + ' ' + f1(b) + ' 0Z' }, gEl);
+    el('path', { 'class': 'leaf-u' + v, d: 'M' + f1(b) + ' 0C' + f1(b + L * 0.14) + ' ' + f1(-w * 1.05) + ' ' + f1(b + L * 0.62) + ' ' + f1(-w * 1.12) + ' ' + f1(tx) + ' ' + f1(ty) + 'Q' + f1(b + L * 0.5) + ' ' + f1(-w * 0.03) + ' ' + f1(b) + ' 0Z' }, gEl);
+    var vd = '';
+    for (var j = 1; j <= 4; j++) {
+      var t = j / 5.2, mx = b + L * t, my = -w * 0.03 * t * 2 - w * 0.1 * t * t;
+      var reach = Math.sin(Math.PI * Math.min(t + 0.1, 0.95)) * 0.78;
+      vd += 'M' + f1(mx) + ' ' + f1(my) + 'Q' + f1(mx + L * 0.08) + ' ' + f1(my - w * reach * 0.6) + ' ' + f1(mx + L * 0.16) + ' ' + f1(-w * reach);
+      vd += 'M' + f1(mx) + ' ' + f1(my) + 'Q' + f1(mx + L * 0.08) + ' ' + f1(my + w * reach * 0.55) + ' ' + f1(mx + L * 0.17) + ' ' + f1(w * reach * 0.85);
+    }
+    el('path', { 'class': 'vein', d: vd }, gEl);
+    el('path', { 'class': 'rib', d: rib }, gEl);
     gEl.style.visibility = 'hidden';
     return { v: -1, set: function (v) {
       if (Math.abs(v - this.v) < 1e-4) return; this.v = v;
       if (v <= 0.002) { gEl.style.visibility = 'hidden'; return; }
-      var e = eo(v);
+      var e = eo(v), o = eo(k(v, 0.25, 1)); // grows first, then the two halves open out
       gEl.style.visibility = 'visible';
-      gEl.setAttribute('transform', 'translate(' + f1(x) + ' ' + f1(y) + ') rotate(' + f1(ang + (1 - e) * fold) + ') scale(' + (0.1 + 0.9 * e).toFixed(3) + ')');
+      gEl.setAttribute('transform', 'translate(' + f1(x) + ' ' + f1(y) + ') rotate(' + f1(ang + (1 - e) * fold) + ') scale(' + (0.12 + 0.88 * e).toFixed(3) + ' ' + ((0.12 + 0.88 * e) * (0.18 + 0.82 * o)).toFixed(3) + ')');
+    } };
+  }
+  function bloom(parent, x, y, dirAng, r) { // a closed bud that opens into a five-petal flower
+    var gEl = el('g', { transform: 'translate(' + f1(x) + ' ' + f1(y) + ')' }, parent), petals = [];
+    for (var i = 0; i < 5; i++) petals.push(el('path', { 'class': 'petal', d: 'M0 0C' + f1(r * 0.3) + ' ' + f1(-r * 0.55) + ' ' + f1(r * 0.95) + ' ' + f1(-r * 0.5) + ' ' + f1(r) + ' 0C' + f1(r * 0.95) + ' ' + f1(r * 0.5) + ' ' + f1(r * 0.3) + ' ' + f1(r * 0.55) + ' 0 0Z' }, gEl));
+    var sepal = el('path', { 'class': 'sepal', d: 'M' + f1(-r * 0.15) + ' 0Q' + f1(r * 0.2) + ' ' + f1(-r * 0.32) + ' ' + f1(r * 0.55) + ' 0Q' + f1(r * 0.2) + ' ' + f1(r * 0.32) + ' ' + f1(-r * 0.15) + ' 0Z', transform: 'rotate(' + f1(dirAng) + ')' }, gEl);
+    var heart = el('circle', { 'class': 'heart', r: f1(r * 0.24) }, gEl);
+    gEl.style.visibility = 'hidden';
+    return { g: gEl, s: '', set: function (grow, open) {
+      var key = grow.toFixed(3) + '/' + open.toFixed(3);
+      if (key === this.s) return; this.s = key;
+      if (grow <= 0.002) { gEl.style.visibility = 'hidden'; return; }
+      gEl.style.visibility = 'visible';
+      var o = eo(open), sc = 0.25 + 0.75 * eo(grow);
+      petals.forEach(function (p, i) {
+        p.setAttribute('transform', 'scale(' + sc.toFixed(3) + ') rotate(' + f1(dirAng + (i - 2) * (6 + 66 * o)) + ') scale(' + (0.62 + 0.38 * o).toFixed(3) + ' ' + (0.45 + 0.55 * o).toFixed(3) + ')');
+      });
+      heart.style.opacity = o.toFixed(3);
+      sepal.style.opacity = (1 - o * 0.6).toFixed(3);
     } };
   }
 
   function buildDefs() {
     defs = el('defs', {}, svg);
-    var lg = el('linearGradient', { id: 'leafA', x1: 0, y1: 0, x2: 1, y2: 0 }, defs);
-    el('stop', { offset: 0, style: 'stop-color:var(--forest)' }, lg); el('stop', { offset: 1, style: 'stop-color:var(--leaf)' }, lg);
-    lg = el('linearGradient', { id: 'leafB', x1: 0, y1: 0, x2: 1, y2: 0 }, defs);
-    el('stop', { offset: 0, style: 'stop-color:var(--leaf)' }, lg); el('stop', { offset: 1, style: 'stop-color:#A9B99B' }, lg);
-    lg = el('linearGradient', { id: 'groundTone', x1: 0, y1: 0, x2: 0, y2: 1 }, defs);
+    function lin(id, a, b, c, vertical) {
+      var lg = el('linearGradient', { id: id, x1: 0, y1: 0, x2: vertical ? 0 : 1, y2: vertical ? 1 : 0 }, defs);
+      el('stop', { offset: 0, style: 'stop-color:' + a }, lg);
+      el('stop', { offset: '.55', style: 'stop-color:' + b }, lg);
+      el('stop', { offset: 1, style: 'stop-color:' + c }, lg);
+    }
+    lin('leafU', 'var(--p-dark)', 'var(--p-mid)', 'var(--p-light)');
+    lin('leafL', 'var(--p-mid)', 'var(--p-light)', 'var(--p-xlight)');
+    lin('leafU2', 'var(--p-mid)', 'var(--p-light)', 'var(--p-xlight)');
+    lin('leafL2', 'var(--p-light)', 'var(--p-xlight)', 'var(--p-pale)');
+    lin('petal', '#8F4E36', '#BA7355', '#E8B79A');
+    lin('soil', 'var(--soil-top)', 'var(--soil-mid)', 'var(--soil-low)', true);
+    var lg = el('linearGradient', { id: 'groundTone', x1: 0, y1: 0, x2: 0, y2: 1 }, defs);
     el('stop', { offset: 0, style: 'stop-color:var(--fg);stop-opacity:.06' }, lg); el('stop', { offset: 1, style: 'stop-color:var(--fg);stop-opacity:0' }, lg);
     var rg = el('radialGradient', { id: 'seedFill', cx: '.36', cy: '.3', r: '.8' }, defs);
     el('stop', { offset: 0, 'stop-color': '#E2AE8F' }, rg); el('stop', { offset: '.45', 'stop-color': '#BA7355' }, rg); el('stop', { offset: 1, 'stop-color': '#6E3F2B' }, rg);
@@ -167,38 +222,70 @@
 
     // Ground: a delicate line and a faint tonal change, outside the camera so it stays put
     el('rect', { 'class': 'ground-tone', x: 0, y: g, width: W, height: H - g }, svg);
+    // Soil: a few stones and grains, and grass along the ground line (fixed, they never move on their own)
+    var soil = el('g', { 'class': 'soil' }, svg);
+    var nS = Math.round(W / (mobile ? 9 : 7));
+    for (var si = 0; si < nS; si++) {
+      var sx = rnd(si + 50) * W, sy = g + 6 + Math.pow(rnd(si + 90), 0.7) * (H - g - 8);
+      if (Math.abs(sx - cx) < 26 && sy < g + 70) continue;
+      var big = rnd(si + 130) > 0.9;
+      el('ellipse', { cx: f1(sx), cy: f1(sy), rx: f1(big ? 2.6 + rnd(si) * 3 : 0.6 + rnd(si) * 1.1), ry: f1(big ? 1.6 + rnd(si + 3) * 1.6 : 0.5 + rnd(si + 7) * 0.7), 'class': big ? 'stone' : 'grain' }, soil);
+    }
+    var grass = el('g', { 'class': 'grass' }, svg), gd2 = '';
+    var tufts = mobile ? 7 : 16;
+    for (var gi = 0; gi < tufts; gi++) {
+      var gx = 20 + rnd(gi + 200) * (W - 40);
+      if (Math.abs(gx - cx) < 70 || (mobile && gx < 70)) continue;
+      for (var bl = 0; bl < 4; bl++) {
+        var bh = 6 + rnd(gi * 7 + bl) * (mobile ? 9 : 14), lean = (rnd(gi * 3 + bl) - 0.5) * 12;
+        var bx = gx + (bl - 1.5) * 2.2, by = g + Math.sin(bx / 97) * 1.2;
+        gd2 += 'M' + f1(bx - 1) + ' ' + f1(by + 1) + 'Q' + f1(bx + lean * 0.3) + ' ' + f1(by - bh * 0.6) + ' ' + f1(bx + lean) + ' ' + f1(by - bh) + 'Q' + f1(bx + lean * 0.2 + 1) + ' ' + f1(by - bh * 0.5) + ' ' + f1(bx + 1.2) + ' ' + f1(by + 1) + 'Z';
+      }
+    }
+    el('path', { d: gd2 }, grass);
     var gd = 'M-10 ' + (g + 1);
     for (var x = 0; x <= W + 40; x += 40) gd += 'L' + x + ' ' + f1(g + Math.sin(x / 97) * 1.2 + Math.sin(x / 31) * 0.5);
     el('path', { 'class': 'ground', d: gd }, svg);
 
     var connLayer = el('g', {}, svg);
     cam = el('g', {}, svg);
+    plantShadow = el('ellipse', { 'class': 'plant-shadow', cx: cx + 6, cy: g + 1, rx: 1, ry: 5 }, cam);
     var rootLayer = el('g', {}, cam);
 
     // Roots
-    var rl = Math.min(H - g - 10, mobile ? 40 : 74);
-    rootMain = grower(rootLayer, cubic({ x: cx, y: g - 3 }, { x: cx + 3, y: g + rl * 0.35 }, { x: cx - 11, y: g + rl * 0.6 }, { x: cx - 6, y: g + rl }, 18), mobile ? 2.4 : 3, 0.5, 'root');
+    var rl = Math.min(H - g - 8, mobile ? 58 : 92);
+    rootMain = grower(rootLayer, cubic({ x: cx, y: g - 3 }, { x: cx + 3, y: g + rl * 0.35 }, { x: cx - 11, y: g + rl * 0.6 }, { x: cx - 6, y: g + rl }, 22), mobile ? 2.8 : 3.6, 0.5, 'root');
     rootlets = [];
-    if (!mobile) {
-      var r1 = at(rootMain.pts, 0.42), r2 = at(rootMain.pts, 0.66);
-      rootlets.push(grower(rootLayer, cubic(r1, { x: r1.x - 8, y: r1.y + 4 }, { x: r1.x - 18, y: r1.y + 8 }, { x: r1.x - 30, y: r1.y + 20 }, 10), 1.6, 0.4, 'root'));
-      rootlets.push(grower(rootLayer, cubic(r2, { x: r2.x + 8, y: r2.y + 3 }, { x: r2.x + 16, y: r2.y + 9 }, { x: r2.x + 24, y: r2.y + 20 }, 10), 1.4, 0.4, 'root'));
-    }
+    // side roots branch off the main root, each with a finer root of its own
+    var rs = mobile ? [[0.3, -1, 0.5], [0.55, 1, 0.45]] : [[0.22, -1, 0.75], [0.36, 1, 0.65], [0.52, -1, 0.6], [0.68, 1, 0.5], [0.82, -1, 0.35]];
+    rs.forEach(function (r, j) {
+      var o = at(rootMain.pts, r[0]), ln = rl * r[2], d = r[1];
+      var e = { x: o.x + d * ln * 0.9, y: o.y + ln * (0.45 + rnd(j + 40) * 0.25) };
+      var pts = cubic(o, { x: o.x + d * ln * 0.3, y: o.y + 2 }, { x: o.x + d * ln * 0.6, y: o.y + ln * 0.15 }, e, 14);
+      rootlets.push(grower(rootLayer, pts, mobile ? 1.4 : 1.8, 0.3, 'root'));
+      var q = at(pts, 0.5), l2 = ln * 0.4;
+      rootlets.push(grower(rootLayer, cubic(q, { x: q.x + d * l2 * 0.2, y: q.y + l2 * 0.3 }, { x: q.x + d * l2 * 0.3, y: q.y + l2 * 0.6 }, { x: q.x + d * l2 * 0.15 - d * 3, y: q.y + l2 }, 8), 0.9, 0.25, 'root'));
+    });
 
     // Stem: slightly irregular, tapering towards the top
-    var amp = mobile ? 3.5 : 9, M = 64, sp = [];
+    var amp = mobile ? 4 : 14, M = 64, sp = [];
     for (var i = 0; i <= M; i++) {
       var s = i / M;
       sp.push({ x: cx + amp * (Math.sin(s * 4.1 + 0.4) * 0.7 + Math.sin(s * 9.3 + 1.3) * 0.3) * Math.min(1, s * 2.5),
                 y: g - 5 - (g - 5 - topY) * s });
     }
     measure(sp);
-    stem = grower(cam, sp, mobile ? 5 : 7.5, 1.3, 'stem');
+    stem = grower(cam, sp, mobile ? 6 : 10, 1.6, 'stem');
     shootFrac = (mobile ? 58 : 92) / sp.L;
+    // the growing tip: a small pointed bud that rides on the end of the stem
+    apex = el('g', {}, cam);
+    el('path', { 'class': 'leaf-u2', d: 'M-3 -4.6Q7 -6 17 -0.8Q8 1.2 -3 0.6Z' }, apex);
+    el('path', { 'class': 'leaf-l2', d: 'M-3 4.6Q7 6 16 1Q8 -1 -3 -0.6Z' }, apex);
+    apex.style.visibility = 'hidden'; stemW = [mobile ? 6 : 10, 1.6];
 
     // Seed leaves (cotyledons), low on the stem
-    var cp = at(sp, (mobile ? 34 : 50) / sp.L), cl = mobile ? 15 : 22;
-    cotys = [leaf(cam, cp.x - 1, cp.y, -158, cl, 68, 'b', 0.5), leaf(cam, cp.x + 1, cp.y, -22, cl, -68, 'b', 0.5)];
+    var cp = at(sp, (mobile ? 34 : 50) / sp.L), cl = mobile ? 18 : 28;
+    cotys = [leaf(cam, cp.x - 1, cp.y, -158, cl, 68, 'b', 0.38), leaf(cam, cp.x + 1, cp.y, -22, cl, -68, 'b', 0.38)];
 
     // Branches: one per project, alternating sides, natural variation in length and angle
     var cardW = mobile ? 0 : Math.round(clamp(W * 0.27, 290, 350));
@@ -213,29 +300,33 @@
       var rise = mobile ? 6 : 16 + rnd(i + 7) * 34;
       var E = { x: S.x + dir * len, y: S.y - rise };
       var bp = cubic(S, { x: S.x + dir * len * 0.3, y: S.y + 4 }, { x: S.x + dir * len * 0.7, y: S.y - rise * 0.85 }, E, 26);
-      var b = { i: i, dir: dir, E: E, br: grower(cam, bp, mobile ? 3.2 : 4.8, 1.1, 'branch'), leaves: [] };
-      var spots = mobile ? [[0.45, -1], [0.75, 1]] : [[0.34, -1], [0.58, 1], [0.82, -1]];
+      var b = { i: i, dir: dir, E: E, br: grower(cam, bp, mobile ? 3.8 : 6, 1.3, 'branch'), leaves: [] };
+      var spots = mobile ? [[0.42, -1], [0.72, 1]] : [[0.26, -1], [0.44, 1], [0.6, -1], [0.76, 1], [0.9, -1]];
       spots.forEach(function (sp2, j) {
         var q = at(bp, sp2[0]), a = q.ang;
-        var ang = sp2[1] < 0 ? a - (44 + rnd(i * 5 + j) * 10) * dir : a + (38 + rnd(i * 7 + j) * 10) * dir;
-        var ln = mobile ? 11 : 15 + rnd(i * 3 + j) * 9;
-        b.leaves.push({ f: sp2[0], l: leaf(cam, q.x, q.y, ang, ln, a - ang, j % 2 ? 'b' : '') });
+        var ang = sp2[1] < 0 ? a - (40 + rnd(i * 5 + j) * 16) * dir : a + (36 + rnd(i * 7 + j) * 16) * dir;
+        var ln = mobile ? 18 + rnd(i + j) * 5 : (28 + rnd(i * 3 + j) * 16) * (1.05 - sp2[0] * 0.35);
+        b.leaves.push({ f: sp2[0], l: leaf(cam, q.x, q.y, ang, ln, a - ang, (i + j) % 3 ? '' : 'b', 0.22 + rnd(i * 9 + j) * 0.07) });
       });
-      b.ring = el('circle', { 'class': 'bud-ring', cx: f1(E.x), cy: f1(E.y), r: 8 }, cam);
-      b.bud = el('circle', { 'class': 'bud', cx: f1(E.x), cy: f1(E.y), r: mobile ? 3.4 : 4 }, cam);
-      b.ring.style.opacity = 0; b.bud.style.opacity = 0;
+      var endAng = at(bp, 0.99).ang;
+      b.node = el('ellipse', { 'class': 'stem', cx: f1(S.x), cy: f1(S.y), rx: mobile ? 2.8 : 4.2, ry: mobile ? 2.2 : 3.2 }, cam);
+      b.node.style.opacity = 0;
+      var br = mobile ? 8 : 13;
+      b.ring = el('circle', { 'class': 'bud-ring', cx: f1(E.x), cy: f1(E.y), r: br * 1.7 }, cam);
+      b.ring.style.opacity = 0;
+      b.bloom = bloom(cam, E.x, E.y, endAng, br);
       branches.push(b);
     });
 
     // A few leaves along the stem between branches (fewer on phones)
     stemLeaves = [];
-    var fl = mobile ? [0.33, 0.7] : [0.2, 0.33, 0.47, 0.6, 0.74, 0.87, 0.96];
+    var fl = mobile ? [0.2, 0.33, 0.5, 0.7, 0.88, 0.97] : [0.16, 0.24, 0.33, 0.42, 0.5, 0.6, 0.68, 0.76, 0.85, 0.92, 0.97];
     fl.forEach(function (f, j) {
       if (attachFrac.some(function (a) { return Math.abs(a - f) < 0.035; })) f += 0.03;
       var q = at(sp, f), side = j % 2 ? 1 : -1;
       var ang = side > 0 ? -38 - rnd(j + 11) * 14 : -142 + rnd(j + 13) * 14;
-      var ln = mobile ? 12 : 17 + rnd(j + 17) * 10;
-      stemLeaves.push({ f: f, l: leaf(cam, q.x + side, q.y, ang, ln, -90 - ang, j % 3 ? '' : 'b') });
+      var ln = (mobile ? 16 + rnd(j + 17) * 6 : 26 + rnd(j + 17) * 16) * (1.1 - f * 0.4);
+      stemLeaves.push({ f: f, l: leaf(cam, q.x + side, q.y, ang, ln, -90 - ang, j % 3 ? '' : 'b', 0.23 + rnd(j + 5) * 0.07) });
     });
 
     seed = buildSeed(cx, g - 1, mobile ? 1.15 : 1.45);
@@ -311,6 +402,13 @@
     rootlets.forEach(function (r, j) { r.set(eo(k(u, A + B * (0.3 + j * 0.15), A + B))); });
     var ps = shootFrac * eo(k(u, A * 0.7, A + B * 0.85)) + (1 - shootFrac) * eio(k(u, A + B * 0.65, S0 - 0.05));
     stem.set(ps);
+    if (ps > 0.003) {
+      var tp = at(stem.pts, Math.min(1, ps + ((stemW[0] + 6) / 2 - 4) / stem.pts.L)), tw = stemW[0] + (stemW[1] - stemW[0]) * Math.pow(ps, 0.8);
+      apex.style.visibility = 'visible';
+      apex.setAttribute('transform', 'translate(' + f1(tp.x) + ' ' + f1(tp.y) + ') rotate(' + f1(tp.ang) + ') scale(' + (Math.max(tw, 2.4) / 9).toFixed(3) + ')');
+    } else apex.style.visibility = 'hidden';
+    plantShadow.setAttribute('rx', f1(2 + (mobile ? 22 : 48) * ps));
+    plantShadow.style.opacity = Math.min(1, ps * 4).toFixed(3);
     cotys.forEach(function (c, j) { c.set(k(u, A + B * (0.35 + j * 0.06), A + B * 0.95)); });
     // C: leaves along the stem unfold as the stem passes them
     stemLeaves.forEach(function (s) { s.l.set(k(ps, s.f + 0.004, s.f + 0.07)); });
@@ -322,8 +420,8 @@
       var bp = eio(k(u, s0, s0 + 0.4));
       b.br.set(bp);
       b.leaves.forEach(function (L) { L.l.set(k(bp, L.f - 0.02, L.f + 0.26)); });
-      var budV = k(bp, 0.9, 1);
-      b.bud.style.opacity = budV.toFixed(3);
+      b.node.style.opacity = k(bp, 0, 0.08).toFixed(3);
+      b.bloom.set(k(bp, 0.82, 1), k(u, s0 + 0.34, s0 + 0.62));
       var cv = 0;
       if (b.card) {
         var cin = eo(k(u, s0 + 0.32, s0 + 0.5)), cout = 1 - k(u, s0 + P - 0.22, s0 + P + 0.02);
@@ -366,7 +464,7 @@
       var X = tx + s * b.E.x, Y = ty + s * b.E.y + offY;
       lab.style.visibility = 'visible';
       lab.style.opacity = lv.toFixed(3);
-      lab.style.transform = 'translate3d(' + f1(b.dir < 0 && !mobile ? X - 10 : X + 8) + 'px,' + f1(Y) + 'px,0) translate(' + (b.dir < 0 && !mobile ? '-100%' : '0') + ',-50%)';
+      lab.style.transform = 'translate3d(' + f1(b.dir < 0 && !mobile ? X - 16 * s : X + 14 * s) + 'px,' + f1(Y) + 'px,0) translate(' + (b.dir < 0 && !mobile ? '-100%' : '0') + ',-50%)';
       lab.classList.toggle('live', lv > 0.6);
     });
 
