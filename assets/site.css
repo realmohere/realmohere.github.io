@@ -290,3 +290,6 @@ ul.what { padding-left: 1.1em; display: grid; gap: 6px; }
 .hero h2 { font-size: clamp(2rem, 4.6vw, 3.6rem); line-height: 1.02; letter-spacing: -0.03em; margin: 0 0 16px; max-width: 14ch; font-weight: 500; }
 @media (max-width: 759px) { .hero h2 { font-size: 2rem; } }
 .grow.is-static .hero { padding-top: 48px; }
+.plant-label .n { width: auto; min-width: 26px; padding: 0 7px; }
+.pcard-mile .pcard-meta .num { letter-spacing: .02em; }
+.story-list[hidden] { display: none; }

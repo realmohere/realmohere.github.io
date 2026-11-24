@@ -25,8 +25,10 @@
   var finale = grow.querySelector('.finale');
   var cardsLayer = grow.querySelector('.scene-cards');
   var labelsLayer = grow.querySelector('.scene-labels');
-  var list = document.getElementById('project-list');
-  var items = list ? [].slice.call(list.children).filter(function (li) { return li.classList.contains('project'); }) : [];
+  // The story: the first entry is the seed, every other entry grows its own branch (see projects/projects.json)
+  var list = document.getElementById('story-list') || document.getElementById('project-list');
+  var items = list ? [].slice.call(list.children).filter(function (li) { return li.classList.contains('story-item') || li.classList.contains('project'); }) : [];
+  var seedItem = items.length && items[0].classList.contains('seed') ? items.shift() : null, seedCard = null;
   var N = items.length;
   var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
   var animated = !reduce;
@@ -35,7 +37,7 @@
   var A = 0.55;          // seed opens, first root
   var B = 0.75;          // germination: root deepens, shoot and first leaves
   var C = 0.75;          // the stem grows to full height
-  var P = 1.25;          // per project: branch grows, card shows, time to read, card retreats
+  var P = 1.1;           // per chapter: branch grows, card shows, time to read, card retreats
   var EE = 1.1;          // mature plant and contact invitation
   var S0 = A + B + C, END = S0 + N * P, TOTAL = END + EE;
 
@@ -97,7 +99,7 @@
 
   // ---- Scene state (rebuilt on resize) ----
   var W, H, g, mobile, cx, dxFinal, topY, navH, sE, defs, cam, maskN;
-  var apex, stemW, plantShadow, seed, rootMain, rootlets, stem, shootFrac, cotys, stemLeaves, branches, finaleH;
+  var finaleBot = 0, apex, stemW, plantShadow, seed, rootMain, rootlets, stem, shootFrac, cotys, stemLeaves, branches, finaleH;
   var trackTop = 0, Hs = 1, uD = -1, raf = 0, lastCam = '';
 
   function grower(parent, pts, w0, w1, cls) { // tapered shape revealed along its length through a stroked mask
@@ -339,9 +341,10 @@
       var title = li.querySelector('.pcard-title');
       var lab = document.createElement('a');
       lab.className = 'plant-label' + (b.dir < 0 && !mobile ? ' left' : '');
-      lab.href = '#' + li.id; lab.tabIndex = -1;
-      lab.innerHTML = '<span class="n">' + String(i + 1).padStart(2, '0') + '</span><span class="t"></span>';
-      lab.querySelector('.t').textContent = title ? title.textContent : '';
+      lab.href = li.getAttribute('data-href') || ('#' + li.id); lab.tabIndex = -1;
+      lab.innerHTML = '<span class="n"></span><span class="t"></span>';
+      lab.querySelector('.n').textContent = li.hasAttribute('data-label') ? (li.getAttribute('data-label') || '•') : String(i + 1).padStart(2, '0');
+      lab.querySelector('.t').textContent = li.getAttribute('data-short') || (title ? title.textContent : '');
       lab.addEventListener('click', function (e) { if (!animated) return; e.preventDefault(); goTo(i); });
       labelsLayer.appendChild(lab);
       b.label = lab;
@@ -366,6 +369,21 @@
       b.conn.style.opacity = 0;
       b.edge = { x: edgeX, y0: y + 18, y1: y + h - 18 };
     });
+    // The seed's own card, shown while the seed opens and germinates
+    seedCard = null;
+    if (seedItem && animated) {
+      var sc0 = seedItem.cloneNode(true);
+      sc0.classList.add('project');
+      [].forEach.call(sc0.querySelectorAll('a'), function (a) { a.tabIndex = -1; });
+      var sw = mobile ? W - 28 : Math.round(clamp(W * 0.27, 280, 340));
+      sc0.style.width = sw + 'px';
+      cardsLayer.appendChild(sc0);
+      var shh = sc0.offsetHeight;
+      var sx = mobile ? 14 : cx + 70, sy = mobile ? navH + 16 : clamp(g - shh - 60, navH + 12, H - shh - 14);
+      sc0.style.left = Math.round(sx) + 'px'; sc0.style.top = Math.round(sy) + 'px';
+      seedCard = sc0;
+    }
+
     // Which labels would sit under which card (so they hide while that card is open)
     branches.forEach(function (b) {
       b.under = branches.map(function (o) {
@@ -378,6 +396,7 @@
 
     // Camera scale for the mature plant, leaving room for the contact invitation above it
     finaleH = animated ? finale.offsetHeight : 0;
+    finaleBot = animated ? finale.offsetTop + finaleH : 0;
     var room = animated ? navH + Math.max(18, H * 0.06) + finaleH + (mobile ? 16 : 28) : 0;
     sE = animated ? clamp((g - room) / (g - topY + 34), 0.42, 1) : 1;
 
@@ -420,6 +439,14 @@
     // C: leaves along the stem unfold as the stem passes them
     stemLeaves.forEach(function (s) { s.l.set(k(ps, s.f + 0.004, s.f + 0.07)); });
 
+    if (seedCard) {
+      var sv = Math.min(eo(k(u, 0.45, 0.8)), 1 - k(u, S0 - 0.35, S0 - 0.05));
+      seedCard.style.visibility = sv > 0.002 ? 'visible' : 'hidden';
+      seedCard.style.opacity = sv.toFixed(3);
+      seedCard.style.transform = 'translate3d(0,' + f1((1 - sv) * 14) + 'px,0)';
+      seedCard.classList.toggle('live', sv > 0.6);
+    }
+
     // D: one branch per project
     var vis = [];
     branches.forEach(function (b, i) {
@@ -457,25 +484,39 @@
     var three = api.r3 && animated;
     if (three) api.r3.render(u, tx, ty, s);
 
+    var fv = animated ? eo(k(u, END + 0.3, END + 0.75)) : 0;
     // Labels: each project keeps a small marker on its branch once its card has been read
     var offY = animated ? 0 : svg.getBoundingClientRect().top - stage.getBoundingClientRect().top;
+    var shown = [];
     branches.forEach(function (b, i) {
       var s0 = S0 + i * P, lv;
       if (!animated) lv = 1;
-      else if (mobile) lv = k(u, s0 + 0.3, s0 + 0.42);
+      else if (mobile) lv = k(u, s0 + 0.3, s0 + 0.42) * (1 - fv);   // on phones the closing screen is too small for 17 markers
       else lv = Math.max(k(u, s0 + P - 0.16, s0 + P + 0.04), fin);
       var hide = 0;
       for (var j = 0; j < vis.length; j++) if (b.under[j] && j !== i) hide = Math.max(hide, vis[j]);
       if (!mobile && vis[i] > 0) hide = Math.max(hide, vis[i]);
       lv *= 1 - hide;
-      var lab = b.label;
+      var lab = b.label, X = 0, Y = 0;
+      if (lv > 0.01) {
+        X = tx + s * b.E.x; Y = ty + s * b.E.y + offY;
+        if (three) { var q = api.r3.tip(i); X = q[0]; Y = q[1]; }
+        if (fv > 0 && Y < finaleBot + 16) lv *= 1 - fv;   // the closing invitation takes the top of the screen
+      }
       if (lv <= 0.01) { if (lab.style.visibility !== 'hidden') { lab.style.visibility = 'hidden'; lab.classList.remove('live'); } return; }
-      var X = tx + s * b.E.x, Y = ty + s * b.E.y + offY;
-      if (three) { var q = api.r3.tip(i); X = q[0]; Y = q[1]; }
+      shown.push({ b: b, lab: lab, lv: lv, X: X, Y: Y, side: mobile ? 1 : b.dir });
+    });
+    // Keep markers on the same side from sitting on top of each other
+    [-1, 1].forEach(function (side) {
+      var col = shown.filter(function (o) { return o.side === side; }).sort(function (a, c) { return c.Y - a.Y; });
+      for (var j = 1; j < col.length; j++) if (col[j - 1].Y - col[j].Y < 25) col[j].Y = col[j - 1].Y - 25;
+    });
+    shown.forEach(function (o) {
+      var lab = o.lab, left = o.b.dir < 0 && !mobile;
       lab.style.visibility = 'visible';
-      lab.style.opacity = lv.toFixed(3);
-      lab.style.transform = 'translate3d(' + f1(b.dir < 0 && !mobile ? X - 16 * s : X + 14 * s) + 'px,' + f1(Y) + 'px,0) translate(' + (b.dir < 0 && !mobile ? '-100%' : '0') + ',-50%)';
-      lab.classList.toggle('live', lv > 0.6);
+      lab.style.opacity = o.lv.toFixed(3);
+      lab.style.transform = 'translate3d(' + f1(left ? o.X - 16 * s : o.X + 14 * s) + 'px,' + f1(o.Y) + 'px,0) translate(' + (left ? '-100%' : '0') + ',-50%)';
+      lab.classList.toggle('live', o.lv > 0.6);
     });
 
     // In 3D the branch tips move a little with the camera, so the dotted lines to the cards follow them
@@ -487,7 +528,6 @@
 
     // E: invitation to get in touch
     if (animated) {
-      var fv = eo(k(u, END + 0.3, END + 0.75));
       finale.style.opacity = fv.toFixed(3);
       finale.style.visibility = fv > 0.01 ? 'visible' : 'hidden';
       finale.style.transform = 'translateY(' + f1((1 - fv) * 16) + 'px)';
@@ -555,5 +595,5 @@
 
   // Buttons that should travel through the growth rather than jump past it
   var explore = document.getElementById('explore');
-  if (explore && animated) explore.addEventListener('click', function (e) { e.preventDefault(); goTo(0); });
+  if (explore && animated) explore.addEventListener('click', function (e) { e.preventDefault(); window.scrollTo({ top: trackTop + (seedItem ? 0.75 : S0 + 0.66) * Hs, behavior: reduce ? 'auto' : 'smooth' }); });
 })();
