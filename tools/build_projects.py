@@ -132,16 +132,43 @@ def detail_page(p, i):
 '''
 
 
-def replace_block(path, block, indent=''):
+def replace_block(path, block, indent='', marker='PROJECTS'):
     s = open(path, encoding='utf-8').read()
-    new, n = re.subn(r'(<!-- PROJECTS:START -->)(.*?)(\s*<!-- PROJECTS:END -->)',
+    new, n = re.subn(r'(<!-- ' + marker + r':START -->)(.*?)(\s*<!-- ' + marker + r':END -->)',
                      lambda m: m.group(1) + '\n' + block + m.group(3), s, flags=re.S)
     if n != 1:
-        raise SystemExit(f'Markers not found in {path}')
+        raise SystemExit(f'{marker} markers not found in {path}')
     open(path, 'w', encoding='utf-8').write(new)
 
 
 replace_block(os.path.join(ROOT, 'index.html'), '\n'.join(card(p, i) for i, p in enumerate(projects)))
+
+
+# The story told by the growing plant: the seed, then one branch per entry, in order
+def story_item(s, i):
+    if 'project' in s:
+        k = next(j for j, p in enumerate(projects) if p['slug'] == s['project'])
+        p = projects[k]
+        li = card(p, k)
+        li = re.sub(r' id="[^"]*"', '', li).replace(' aria-labelledby="t-' + p['slug'] + '"', '')
+        li = li.replace('<li class="project"', f'<li class="story-item" data-label="{E(p.get("year") or "")}" data-short="{E(p["title"])}" data-href="#project-{p["slug"]}"', 1)
+        return li
+    cls = 'story-item seed' if s.get('seed') else 'story-item'
+    return f'''    <li class="{cls}" data-label="{E(s["years"].split(" ")[0])}" data-short="{E(s.get("label") or s["title"])}" data-href="{E(s["link"])}">
+      <article class="pcard pcard-mile">
+        <div class="pcard-body">
+        <p class="pcard-meta"><span class="num">{E(s["years"])}</span><span class="status">{E(s["kind"])}</span></p>
+        <h3 class="pcard-title">{E(s["title"])}</h3>
+        <p class="pcard-role">{E(s["org"])}</p>
+        <p class="pcard-desc">{E(s["text"])}</p>
+        <a class="pcard-link" href="{E(s["link"])}">Read more <span aria-hidden="true">→</span></a>
+        </div>
+      </article>
+    </li>'''
+
+
+story = data.get('story') or [{'project': p['slug']} for p in projects]
+replace_block(os.path.join(ROOT, 'index.html'), '\n'.join(story_item(s, i) for i, s in enumerate(story)), marker='STORY')
 for i, p in enumerate(projects):
     open(os.path.join(ROOT, 'projects', p['slug'] + '.html'), 'w', encoding='utf-8').write(detail_page(p, i))
 urls = '\n'.join(f'  <url><loc>{SITE}projects/{p["slug"]}.html</loc></url>' for p in projects)

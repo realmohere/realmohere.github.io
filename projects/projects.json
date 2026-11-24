@@ -9,8 +9,16 @@
       "role": "Designed, built and tested it myself",
       "summary": "A steel-plate hydrogen-generation system, taken from first concept through construction to practical tests of its gas output.",
       "outcome": "A working prototype, tested for gas output.",
-      "tags": ["Mechanical design", "Prototyping", "Testing"],
-      "image": {"src": "projects/img/hydrogen-prototype.svg", "alt": "Line illustration of two steel plates in water with gas bubbles rising", "kind": "illustration"},
+      "tags": [
+        "Mechanical design",
+        "Prototyping",
+        "Testing"
+      ],
+      "image": {
+        "src": "projects/img/hydrogen-prototype.svg",
+        "alt": "Line illustration of two steel plates in water with gas bubbles rising",
+        "kind": "illustration"
+      },
       "detail": {
         "problem": null,
         "approach": "I worked from concept to construction: designing a system around steel plates, building it, and then testing in practice how much gas it produced.",
@@ -26,8 +34,16 @@
       "role": "Designed and built it",
       "summary": "An assistant that finds start-ups and organises their contact details by country and city, to speed up market and partner research.",
       "outcome": null,
-      "tags": ["AI tools", "Market research", "Automation"],
-      "image": {"src": "projects/img/research-assistant.svg", "alt": "Line illustration of a magnifying glass over a map with marked cities", "kind": "illustration"},
+      "tags": [
+        "AI tools",
+        "Market research",
+        "Automation"
+      ],
+      "image": {
+        "src": "projects/img/research-assistant.svg",
+        "alt": "Line illustration of a magnifying glass over a map with marked cities",
+        "kind": "illustration"
+      },
       "detail": {
         "problem": null,
         "approach": "A GPT-based workflow that identifies start-ups and structures their contact information by country and city, so the results can be used directly for outreach and partner research.",
@@ -43,8 +59,16 @@
       "role": "Team member, with an equal share of the analysis and strategy work",
       "summary": "A citizen energy cooperative had sold 20% of the shares in a roughly 400-panel solar roof, and needed 70% before it could be built. We worked out why, and how to close the gap.",
       "outcome": null,
-      "tags": ["Energy transition", "Stakeholder mapping", "Marketing strategy"],
-      "image": {"src": "projects/img/zon-op-haarlemmermeer.svg", "alt": "Line illustration of solar panels on a municipal roof under the sun", "kind": "illustration"},
+      "tags": [
+        "Energy transition",
+        "Stakeholder mapping",
+        "Marketing strategy"
+      ],
+      "image": {
+        "src": "projects/img/zon-op-haarlemmermeer.svg",
+        "alt": "Line illustration of solar panels on a municipal roof under the sun",
+        "kind": "illustration"
+      },
       "detail": {
         "problem": "Zon op Haarlemmermeer, a young energy cooperative run by and for citizens, planned a solar roof of roughly 400 panels on a municipal building, supported by the national SCE subsidy. Only 20% of the shares had been sold, and 70% were needed before construction could go ahead.",
         "approach": "For the course Marketing Sustainable Innovations at Vrije Universiteit Amsterdam, our team analysed the barriers to share sales, mapped the stakeholders and built a value-exchange model. From that we proposed a marketing campaign, a strategy for creating buy-in, and a co-creation plan.",
@@ -60,8 +84,16 @@
       "role": "Author, written with Duisburg Business & Innovation GmbH",
       "summary": "How policy, institutions, incentives and cooperation shape the move from linear to circular production in post-industrial Duisburg, compared with Amsterdam and Singapore.",
       "outcome": null,
-      "tags": ["Circular economy", "Policy analysis", "Economic resilience"],
-      "image": {"src": "projects/img/linear-to-circular-thesis.svg", "alt": "Line illustration of a linear arrow bending into a closed loop around an industrial skyline", "kind": "illustration"},
+      "tags": [
+        "Circular economy",
+        "Policy analysis",
+        "Economic resilience"
+      ],
+      "image": {
+        "src": "projects/img/linear-to-circular-thesis.svg",
+        "alt": "Line illustration of a linear arrow bending into a closed loop around an industrial skyline",
+        "kind": "illustration"
+      },
       "detail": {
         "problem": "Full title: From Linear to Circular: Policy Pathways for Economic Resilience and Sustainability in Duisburg's Post-Industrial Transition. The question was what shapes the shift from linear to circular production in a post-industrial city.",
         "approach": "A policy and institutional analysis of Duisburg, looking at policy, institutions, incentives and cooperation, with Amsterdam and Singapore as comparative cases. Written alongside my work as a project assistant at Duisburg Business & Innovation GmbH.",
@@ -77,8 +109,18 @@
       "role": "Designed and built it",
       "summary": "My personal site, written as plain HTML and hosted free on GitHub Pages, with structured data for search engines and AI assistants and cookieless visitor statistics.",
       "outcome": "Live at momohammadi.nl, verified in Google Search Console and imported into Bing.",
-      "tags": ["Web design", "SEO", "Analytics"],
-      "image": {"src": "projects/img/personal-website.webp", "alt": "Screenshot of the opening screen of momohammadi.nl", "kind": "screenshot", "width": 1200, "height": 750},
+      "tags": [
+        "Web design",
+        "SEO",
+        "Analytics"
+      ],
+      "image": {
+        "src": "projects/img/personal-website.webp",
+        "alt": "Screenshot of the opening screen of momohammadi.nl",
+        "kind": "screenshot",
+        "width": 1200,
+        "height": 750
+      },
       "detail": {
         "problem": "I wanted one place that explains my mix of engineering, economics and policy better than a CV can, and that people and search engines can actually find.",
         "approach": "A single static page without a framework, hosted on GitHub Pages under my own domain. Structured data (JSON-LD), a sitemap and an llms.txt file help search engines and AI assistants understand it. GoatCounter counts visits without cookies.",
@@ -94,8 +136,17 @@
       "role": "Product owner: defined the product, its rules and safety features, and built it with AI coding tools",
       "summary": "An app for meeting new people around Oss through small public hangouts: post a plan, others ask to join, the group chats and meets. References after each meetup build trust.",
       "outcome": null,
-      "tags": ["Product design", "React", "TypeScript", "Firebase"],
-      "image": {"src": "projects/img/meetout.svg", "alt": "Line illustration of map pins connected by a dotted path with chat bubbles", "kind": "illustration"},
+      "tags": [
+        "Product design",
+        "React",
+        "TypeScript",
+        "Firebase"
+      ],
+      "image": {
+        "src": "projects/img/meetout.svg",
+        "alt": "Line illustration of map pins connected by a dotted path with chat bubbles",
+        "kind": "illustration"
+      },
       "detail": {
         "problem": null,
         "approach": "A mobile-first web app with an Android version. Someone posts a hangout at a public spot, others ask to join, and the host accepts or declines. The group chats live, and after meeting up people leave references with descriptive tags. Safety is built in: an 18+ check, public meeting spots, and negative tags that only the person concerned can see. The launch version runs on Firebase with phone sign-in and data stored in the Netherlands.",
@@ -111,8 +162,17 @@
       "role": "Product owner, adapting the Meetout codebase to a new audience",
       "summary": "Dog play dates in Noord-Brabant, starting in Oss. Owners make a profile for their dog, get matched with dogs of similar energy, size and play style, and plan open or private play dates.",
       "outcome": null,
-      "tags": ["Product design", "React", "Firebase", "Dutch and English"],
-      "image": {"src": "projects/img/dogout.svg", "alt": "Line illustration of paw prints and a ball along a dotted path", "kind": "illustration"},
+      "tags": [
+        "Product design",
+        "React",
+        "Firebase",
+        "Dutch and English"
+      ],
+      "image": {
+        "src": "projects/img/dogout.svg",
+        "alt": "Line illustration of paw prints and a ball along a dotted path",
+        "kind": "illustration"
+      },
       "detail": {
         "problem": null,
         "approach": "Built from a copy of Meetout: a React and TypeScript web app in Dutch and English on Firebase, with an Android version. Matching uses each dog's energy, size and play style, and a Hangout view shows which dogs are out nearby right now.",
@@ -128,8 +188,17 @@
       "role": "Product owner, working with a team of AI role agents",
       "summary": "A no-shame life game for adults with ADHD, informed by CBT techniques: small real-life steps help your avatar grow, and missing a day never costs you anything.",
       "outcome": null,
-      "tags": ["Game design", "Behaviour change", "JavaScript", "AI agents"],
-      "image": {"src": "projects/img/tend.svg", "alt": "Line illustration of a small sprout character inside a rounded frame with checked steps", "kind": "illustration"},
+      "tags": [
+        "Game design",
+        "Behaviour change",
+        "JavaScript",
+        "AI agents"
+      ],
+      "image": {
+        "src": "projects/img/tend.svg",
+        "alt": "Line illustration of a small sprout character inside a rounded frame with checked steps",
+        "kind": "illustration"
+      },
       "detail": {
         "problem": null,
         "approach": "A playtest prototype that runs in the browser with no accounts. The game rules are written as tested functions. The project is run like a small company, with AI agents in roles from product and design to privacy, marketing and finance, each following written rules. Tend is a self-help game, not a treatment.",
@@ -145,14 +214,134 @@
       "role": "Designed and built them",
       "summary": "Python pipelines that check online sources on a schedule, score new items with AI, draft tailored documents and wait for a human approval before anything is sent.",
       "outcome": null,
-      "tags": ["Python", "AI agents", "Automation", "Testing"],
-      "image": {"src": "projects/img/ai-workflow-automation.svg", "alt": "Line illustration of connected workflow steps ending in a hand-drawn approval tick", "kind": "illustration"},
+      "tags": [
+        "Python",
+        "AI agents",
+        "Automation",
+        "Testing"
+      ],
+      "image": {
+        "src": "projects/img/ai-workflow-automation.svg",
+        "alt": "Line illustration of connected workflow steps ending in a hand-drawn approval tick",
+        "kind": "illustration"
+      },
       "detail": {
         "problem": null,
         "approach": "Scheduled Python pipelines that check sources, filter and score new items with AI, and draft tailored documents. Nothing is sent without a one-tap human approval. A separate review loop has two AI models check each other's work, backed by automated regression tests and an audit of every command run.",
         "contribution": "I designed and built the pipelines and the review loop.",
         "outcome": null
       }
+    }
+  ],
+  "_how_to_edit_story": "The 'story' list is the order of the growing plant on the home page: the first entry is the seed, every other entry grows its own branch. An entry is either {\"project\": \"<slug>\"} (shows that project's card) or a milestone with years, title, org, kind, text and link (an anchor on the page). Only real facts.",
+  "story": [
+    {
+      "seed": true,
+      "years": "2010 – 2016",
+      "kind": "The seed",
+      "title": "B.Sc. Mechanical Engineering",
+      "org": "Azad University, Damavand",
+      "text": "Where my story starts: a bachelor's in mechanical engineering.",
+      "link": "#education"
+    },
+    {
+      "years": "2017 – 2019",
+      "kind": "Engineering",
+      "title": "Assistant Mechanical Engineer",
+      "org": "Saba-Sim Co., Isfahan",
+      "text": "Failure analysis, component design in AutoCAD, analysis in Ansys and cost estimates. Contributed to improvements that raised operational efficiency by more than 20%.",
+      "link": "#experience",
+      "label": "Saba-Sim, Isfahan"
+    },
+    {
+      "project": "hydrogen-prototype"
+    },
+    {
+      "years": "2019 – 2020",
+      "kind": "Trade",
+      "title": "Regional Country Manager",
+      "org": "Taiwan Trade Center (TAITRA), Tehran",
+      "text": "Matched Taiwanese manufacturers with Iranian partners through market research.",
+      "link": "#experience",
+      "label": "TAITRA, Tehran"
+    },
+    {
+      "years": "2021 – 2022",
+      "kind": "Study",
+      "title": "Master's studies in Mechanical Engineering",
+      "org": "Switzerland",
+      "text": "Started a master's in mechanical engineering, then switched to Philosophy, Politics & Economics.",
+      "link": "#education",
+      "label": "Master's studies, Switzerland"
+    },
+    {
+      "years": "2022 – 2026",
+      "kind": "Study",
+      "title": "M.A. Philosophy, Politics & Economics",
+      "org": "Witten/Herdecke University, Germany",
+      "text": "Economics, political and institutional analysis, and how decisions get made, studied while working throughout: instructor at Amazon in Witten, then business development consultant at 1&1 in Düsseldorf.",
+      "link": "#education",
+      "label": "M.A. PPE, Witten/Herdecke"
+    },
+    {
+      "years": "2023 – 2024",
+      "kind": "Volunteering",
+      "title": "Conference organiser, marketing team",
+      "org": "8th International PPE Conference, Witten/Herdecke",
+      "text": "Designed banners and logos, created social media content and planned the outreach with the team.",
+      "link": "#volunteering",
+      "label": "PPE Conference"
+    },
+    {
+      "years": "2024",
+      "kind": "Projects",
+      "title": "Project Assistant",
+      "org": "Duisburg Business & Innovation GmbH",
+      "text": "Green-energy and regional innovation projects: milestones, risks, and technical, market and funding research.",
+      "link": "#experience",
+      "label": "Duisburg Business & Innovation"
+    },
+    {
+      "project": "linear-to-circular-thesis"
+    },
+    {
+      "years": "2024 – 2025",
+      "kind": "Netherlands",
+      "title": "Exchange, Sustainability Management",
+      "org": "Vrije Universiteit Amsterdam",
+      "text": "A semester in Amsterdam on sustainability management.",
+      "link": "#education",
+      "label": "VU Amsterdam"
+    },
+    {
+      "project": "zon-op-haarlemmermeer"
+    },
+    {
+      "years": "2025 – 2026",
+      "kind": "Manufacturing",
+      "title": "Production Operator",
+      "org": "ViCentra (Kaleido), Utrecht",
+      "text": "A GMP cleanroom line for insulin pumps: introduced pre-staging before Base Assembly and found a machine risk that led to a permanent engineering fix.",
+      "link": "#experience",
+      "label": "ViCentra, Utrecht"
+    },
+    {
+      "project": "personal-website"
+    },
+    {
+      "project": "meetout"
+    },
+    {
+      "project": "dogout"
+    },
+    {
+      "project": "tend"
+    },
+    {
+      "project": "ai-workflow-automation"
+    },
+    {
+      "project": "research-assistant"
     }
   ]
 }
