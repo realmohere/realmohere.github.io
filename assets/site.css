@@ -273,3 +273,6 @@ ul.what { padding-left: 1.1em; display: grid; gap: 6px; }
 @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
 @media print { .top, .to-top, .scroll-hint, .plant, .scene-cards, .scene-labels, .finale { display: none !important; } .stage { height: auto; } .hero { position: static; } }
 .grow.is-static .skipanim, .grow.is-static .scroll-hint { display: none; }
+/* 3D plant (assets/plant3d.js): the canvas replaces the flat drawing, the dotted card lines stay */
+.plant3d { position: absolute; inset: 0; width: 100%; height: 100%; display: block; pointer-events: none; }
+.grow.is-3d .plant > :not(.conns) { display: none; }

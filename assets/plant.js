@@ -113,7 +113,7 @@
       el('path', { d: taper(offset(pts, 0.3 * w0, 0.3 * w1), w0 * 0.28, w1 * 0.2), 'class': 'sh' }, shape);
     }
     shape.style.visibility = 'hidden';
-    return { pts: pts, p: -1, set: function (p) {
+    return { pts: pts, w0: w0, w1: w1, p: -1, set: function (p) {
       if (Math.abs(p - this.p) < 1e-4) return; this.p = p;
       mp.setAttribute('stroke-dashoffset', (1 - p).toFixed(4));
       shape.style.visibility = p > 0.003 ? 'visible' : 'hidden';
@@ -136,7 +136,7 @@
     el('path', { 'class': 'vein', d: vd }, gEl);
     el('path', { 'class': 'rib', d: rib }, gEl);
     gEl.style.visibility = 'hidden';
-    return { v: -1, set: function (v) {
+    return { x: x, y: y, ang: ang, len: len, fold: fold, cls: cls, ratio: ratio || 0.26, v: -1, set: function (v) {
       if (Math.abs(v - this.v) < 1e-4) return; this.v = v;
       if (v <= 0.002) { gEl.style.visibility = 'hidden'; return; }
       var e = eo(v), o = eo(k(v, 0.25, 1)); // grows first, then the two halves open out
@@ -150,7 +150,8 @@
     var sepal = el('path', { 'class': 'sepal', d: 'M' + f1(-r * 0.15) + ' 0Q' + f1(r * 0.2) + ' ' + f1(-r * 0.32) + ' ' + f1(r * 0.55) + ' 0Q' + f1(r * 0.2) + ' ' + f1(r * 0.32) + ' ' + f1(-r * 0.15) + ' 0Z', transform: 'rotate(' + f1(dirAng) + ')' }, gEl);
     var heart = el('circle', { 'class': 'heart', r: f1(r * 0.24) }, gEl);
     gEl.style.visibility = 'hidden';
-    return { g: gEl, s: '', set: function (grow, open) {
+    return { x: x, y: y, dirAng: dirAng, r: r, gv: 0, ov: 0, g: gEl, s: '', set: function (grow, open) {
+      this.gv = grow; this.ov = open;
       var key = grow.toFixed(3) + '/' + open.toFixed(3);
       if (key === this.s) return; this.s = key;
       if (grow <= 0.002) { gEl.style.visibility = 'hidden'; return; }
@@ -193,7 +194,7 @@
     var left = el('path', { 'class': 'seed-half', d: 'M0 -17C-7.5 -15 -9.5 -5 -1 0.6L0 0.8Z' }, body);
     var right = el('path', { 'class': 'seed-half', d: 'M0 -17C7.5 -15 9.5 -5 1 0.6L0 0.8Z' }, body);
     var shine = el('ellipse', { 'class': 'seed-shine', cx: 3.4, cy: -11, rx: 1.6, ry: 3.6, transform: 'rotate(18 3.4 -11)' }, body);
-    return { v: -1, set: function (o) {
+    return { x: x, y: y, sc: sc, v: -1, set: function (o) {
       if (Math.abs(o - this.v) < 1e-4) return; this.v = o;
       left.setAttribute('transform', 'translate(' + f1(-1.6 * o) + ' 0) rotate(' + f1(-17 * o) + ' 0 0.6)');
       right.setAttribute('transform', 'translate(' + f1(1.6 * o) + ' 0) rotate(' + f1(17 * o) + ' 0 0.6)');
@@ -247,7 +248,7 @@
     for (var x = 0; x <= W + 40; x += 40) gd += 'L' + x + ' ' + f1(g + Math.sin(x / 97) * 1.2 + Math.sin(x / 31) * 0.5);
     el('path', { 'class': 'ground', d: gd }, svg);
 
-    var connLayer = el('g', {}, svg);
+    var connLayer = el('g', { 'class': 'conns' }, svg);
     cam = el('g', {}, svg);
     plantShadow = el('ellipse', { 'class': 'plant-shadow', cx: cx + 6, cy: g + 1, rx: 1, ry: 5 }, cam);
     var rootLayer = el('g', {}, cam);
@@ -363,6 +364,7 @@
       var edgeX = b.dir < 0 && !mobile ? x + w : x;
       b.conn = el('path', { 'class': 'connector', d: 'M' + f1(ex + b.dir * 6) + ' ' + f1(b.E.y) + 'L' + f1(edgeX) + ' ' + f1(clamp(b.E.y, y + 18, y + h - 18)) }, connLayer);
       b.conn.style.opacity = 0;
+      b.edge = { x: edgeX, y0: y + 18, y1: y + h - 18 };
     });
     // Which labels would sit under which card (so they hide while that card is open)
     branches.forEach(function (b) {
@@ -378,6 +380,11 @@
     finaleH = animated ? finale.offsetHeight : 0;
     var room = animated ? navH + Math.max(18, H * 0.06) + finaleH + (mobile ? 16 : 28) : 0;
     sE = animated ? clamp((g - room) / (g - topY + 34), 0.42, 1) : 1;
+
+    // Hand the scene's geometry to the optional 3D renderer (assets/plant3d.js)
+    api.scene = { W: W, H: H, g: g, cx: cx, mobile: mobile, topY: topY, stem: stem, rootMain: rootMain, rootlets: rootlets,
+      cotys: cotys, stemLeaves: stemLeaves, branches: branches, seed: seed, stemW: stemW };
+    if (api.r3 && animated) api.r3.build(api.scene);
 
     // Track length follows the number of projects
     if (animated) {
@@ -399,7 +406,7 @@
     // A: the seed opens and a root appears. B: the root deepens, a shoot rises, seed leaves unfold.
     seed.set(eo(k(u, 0.08, A * 0.95)));
     rootMain.set(0.3 * eo(k(u, 0.2, A)) + 0.7 * eio(k(u, A, A + B * 0.8)));
-    rootlets.forEach(function (r, j) { r.set(eo(k(u, A + B * (0.3 + j * 0.15), A + B))); });
+    rootlets.forEach(function (r, j) { r.set(eo(k(u, A + B * (0.25 + j * 0.05), A + B * (0.75 + j * 0.03)))); });
     var ps = shootFrac * eo(k(u, A * 0.7, A + B * 0.85)) + (1 - shootFrac) * eio(k(u, A + B * 0.65, S0 - 0.05));
     stem.set(ps);
     if (ps > 0.003) {
@@ -447,6 +454,8 @@
     var tx = dx + cx * (1 - s), ty = g * (1 - s);
     var camStr = 'translate(' + f1(tx) + ' ' + f1(ty) + ') scale(' + s.toFixed(4) + ')';
     if (camStr !== lastCam) { cam.setAttribute('transform', camStr); lastCam = camStr; }
+    var three = api.r3 && animated;
+    if (three) api.r3.render(u, tx, ty, s);
 
     // Labels: each project keeps a small marker on its branch once its card has been read
     var offY = animated ? 0 : svg.getBoundingClientRect().top - stage.getBoundingClientRect().top;
@@ -462,10 +471,18 @@
       var lab = b.label;
       if (lv <= 0.01) { if (lab.style.visibility !== 'hidden') { lab.style.visibility = 'hidden'; lab.classList.remove('live'); } return; }
       var X = tx + s * b.E.x, Y = ty + s * b.E.y + offY;
+      if (three) { var q = api.r3.tip(i); X = q[0]; Y = q[1]; }
       lab.style.visibility = 'visible';
       lab.style.opacity = lv.toFixed(3);
       lab.style.transform = 'translate3d(' + f1(b.dir < 0 && !mobile ? X - 16 * s : X + 14 * s) + 'px,' + f1(Y) + 'px,0) translate(' + (b.dir < 0 && !mobile ? '-100%' : '0') + ',-50%)';
       lab.classList.toggle('live', lv > 0.6);
+    });
+
+    // In 3D the branch tips move a little with the camera, so the dotted lines to the cards follow them
+    if (three) branches.forEach(function (b, i) {
+      if (!b.conn || b.conn.style.opacity === '0') return;
+      var q = api.r3.tip(i);
+      b.conn.setAttribute('d', 'M' + f1(q[0] + b.dir * 10 * s) + ' ' + f1(q[1]) + 'L' + f1(b.edge.x) + ' ' + f1(clamp(q[1], b.edge.y0, b.edge.y1)));
     });
 
     // E: invitation to get in touch
@@ -510,6 +527,12 @@
       render(END);
     }
   }
+
+  // A small interface for assets/plant3d.js, which can take over the drawing with a real 3D scene
+  var api = window.Plant = { animated: animated, r3: null, attach: function (r3) {
+    api.r3 = r3; grow.classList.add('is-3d');
+    var u = uD; build(); uD = u >= 0 ? u : target(); render(uD);
+  }, refresh: function () { if (api.r3) render(uD); } };
 
   start();
   var lastW = W, lastH = H, rt;
