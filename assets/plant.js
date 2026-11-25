@@ -350,6 +350,7 @@
       b.label = lab;
       if (!animated) return;
       var c = li.cloneNode(true);
+      c.classList.add('project');   // story items need the same placement rules as project cards
       c.removeAttribute('id');
       [].forEach.call(c.querySelectorAll('[id]'), function (n) { n.removeAttribute('id'); });
       c.querySelector('.pcard').removeAttribute('aria-labelledby');
@@ -361,7 +362,7 @@
       var h = c.offsetHeight;
       var x = mobile ? ex + 12 : (b.dir < 0 ? ex - 28 - w : ex + 28);
       x = clamp(x, 14, W - 14 - w);
-      var y = clamp(b.E.y - h * 0.4, navH + 12, H - h - 14);
+      var y = Math.max(navH + 12, Math.min(b.E.y - h * 0.4, H - h - 14));   // never under the header, even for a tall card on a short phone screen
       c.style.left = Math.round(x) + 'px'; c.style.top = Math.round(y) + 'px';
       b.card = c; b.box = { x: x, y: y, w: w, h: h };
       var edgeX = b.dir < 0 && !mobile ? x + w : x;
@@ -440,7 +441,9 @@
     stemLeaves.forEach(function (s) { s.l.set(k(ps, s.f + 0.004, s.f + 0.07)); });
 
     if (seedCard) {
-      var sv = Math.min(eo(k(u, 0.45, 0.8)), 1 - k(u, S0 - 0.35, S0 - 0.05));
+      // On phones the plant grows up behind the full-width card, so the card leaves before the stem rises
+      var sv = mobile ? Math.min(eo(k(u, 0.25, 0.5)), 1 - k(u, A + B * 0.55, A + B * 0.85))
+                      : Math.min(eo(k(u, 0.45, 0.8)), 1 - k(u, S0 - 0.35, S0 - 0.05));
       seedCard.style.visibility = sv > 0.002 ? 'visible' : 'hidden';
       seedCard.style.opacity = sv.toFixed(3);
       seedCard.style.transform = 'translate3d(0,' + f1((1 - sv) * 14) + 'px,0)';
