@@ -20,7 +20,7 @@
         "kind": "illustration"
       },
       "detail": {
-        "problem": null,
+        "problem": "A hands-on side project: could a simple design built around steel plates generate hydrogen gas, and what does it take to get from a concept on paper to a device that actually works?",
         "approach": "I worked from concept to construction: designing a system around steel plates, building it, and then testing in practice how much gas it produced.",
         "contribution": "All of it: the design, the build and the testing.",
         "outcome": "A working prototype that produced gas in practical tests."
@@ -45,10 +45,10 @@
         "kind": "illustration"
       },
       "detail": {
-        "problem": null,
+        "problem": "Finding start-ups in a market and collecting their contact details by hand is slow, and the results end up scattered and hard to use for outreach.",
         "approach": "A GPT-based workflow that identifies start-ups and structures their contact information by country and city, so the results can be used directly for outreach and partner research.",
         "contribution": "I designed the workflow and built the assistant.",
-        "outcome": null
+        "outcome": "A working assistant that returns start-ups with their contact details grouped by country and city, ready for outreach and partner research."
       }
     },
     {
@@ -73,7 +73,7 @@
         "problem": "Zon op Haarlemmermeer, a young energy cooperative run by and for citizens, planned a solar roof of roughly 400 panels on a municipal building, supported by the national SCE subsidy. Only 20% of the shares had been sold, and 70% were needed before construction could go ahead.",
         "approach": "For the course Marketing Sustainable Innovations at Vrije Universiteit Amsterdam, our team analysed the barriers to share sales, mapped the stakeholders and built a value-exchange model. From that we proposed a marketing campaign, a strategy for creating buy-in, and a co-creation plan.",
         "contribution": "I shared the research, analysis and recommendations equally with my teammates.",
-        "outcome": null
+        "outcome": "We delivered the analysis and our recommendations, a marketing campaign, a buy-in strategy and a co-creation plan, as a written case report for the course."
       }
     },
     {
@@ -148,10 +148,10 @@
         "kind": "illustration"
       },
       "detail": {
-        "problem": null,
+        "problem": "Meeting new people in a smaller town like Oss is hard once you are past school or university. There are few easy, low-pressure ways to join a few others for something small nearby.",
         "approach": "A mobile-first web app with an Android version. Someone posts a hangout at a public spot, others ask to join, and the host accepts or declines. The group chats live, and after meeting up people leave references with descriptive tags. Safety is built in: an 18+ check, public meeting spots, and negative tags that only the person concerned can see. The launch version runs on Firebase with phone sign-in and data stored in the Netherlands.",
         "contribution": "I defined the product, its rules and safety features, and built it with AI coding tools.",
-        "outcome": null
+        "outcome": "In development. The launch version runs on Firebase and is not public yet."
       }
     },
     {
@@ -174,10 +174,10 @@
         "kind": "illustration"
       },
       "detail": {
-        "problem": null,
+        "problem": "Finding good play partners for a dog is hit and miss. Dogs differ a lot in energy, size and play style, and a poor match makes a play date stressful for dogs and owners.",
         "approach": "Built from a copy of Meetout: a React and TypeScript web app in Dutch and English on Firebase, with an Android version. Matching uses each dog's energy, size and play style, and a Hangout view shows which dogs are out nearby right now.",
         "contribution": "I defined the product and adapted the Meetout codebase for it, working with AI coding tools.",
-        "outcome": null
+        "outcome": "In development and not public yet."
       }
     },
     {
@@ -200,10 +200,10 @@
         "kind": "illustration"
       },
       "detail": {
-        "problem": null,
+        "problem": "Many habit apps punish a missed day with a lost streak. For adults with ADHD that often turns a tool meant to help into one more source of shame.",
         "approach": "A playtest prototype that runs in the browser with no accounts. The game rules are written as tested functions. The project is run like a small company, with AI agents in roles from product and design to privacy, marketing and finance, each following written rules. Tend is a self-help game, not a treatment.",
         "contribution": "I set the direction and decisions as product owner and coordinate the AI role agents.",
-        "outcome": null
+        "outcome": "A playable browser prototype for playtesting. It has not been released publicly."
       }
     },
     {
@@ -226,10 +226,10 @@
         "kind": "illustration"
       },
       "detail": {
-        "problem": null,
+        "problem": "Checking many online sources by hand and writing a tailored document for every relevant new item is repetitive work that is easy to fall behind on.",
         "approach": "Scheduled Python pipelines that check sources, filter and score new items with AI, and draft tailored documents. Nothing is sent without a one-tap human approval. A separate review loop has two AI models check each other's work, backed by automated regression tests and an audit of every command run.",
         "contribution": "I designed and built the pipelines and the review loop.",
-        "outcome": null
+        "outcome": "In personal use. Every outgoing document still needs a human approval before it is sent."
       }
     }
   ],
