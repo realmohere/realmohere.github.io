@@ -66,8 +66,7 @@ def detail_page(p, i):
     tags = ''.join(f'<li>{E(t)}</li>' for t in p.get('tags', []))
     meta = ' · '.join(E(x) for x in [p.get('year'), p.get('status')] if x)
     im = p['image']
-    note = ('<p class="fig-note">Illustration. A real screenshot or photo can replace it.</p>'
-            if im.get('kind') == 'illustration' else '')
+    note = ''  # illustrations are shown without an editor's note; swap in a real image via projects.json
     nav = '<nav class="d-pn" aria-label="More projects">'
     nav += (f'<a class="prev" href="{prev_p["slug"]}.html"><span>Previous</span>{E(prev_p["title"])}</a>' if prev_p else '<span></span>')
     nav += (f'<a class="next" href="{next_p["slug"]}.html"><span>Next</span>{E(next_p["title"])}</a>' if next_p else '<span></span>')
