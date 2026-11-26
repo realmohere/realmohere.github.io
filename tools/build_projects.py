@@ -78,6 +78,12 @@ def detail_page(p, i):
         'creator': {'@type': 'Person', '@id': f'{SITE}#mo', 'name': 'Mohammadhossein Mohammadi'},
         'keywords': ', '.join(p.get('tags', [])),
     }, ensure_ascii=False)
+    crumbs = json.dumps({
+        '@context': 'https://schema.org', '@type': 'BreadcrumbList', 'itemListElement': [
+            {'@type': 'ListItem', 'position': 1, 'name': 'Mohammadhossein Mohammadi', 'item': SITE},
+            {'@type': 'ListItem', 'position': 2, 'name': 'Projects', 'item': f'{SITE}#projects'},
+            {'@type': 'ListItem', 'position': 3, 'name': p['title'], 'item': f'{SITE}projects/{p["slug"]}.html'},
+        ]}, ensure_ascii=False)
     return f'''<!doctype html>
 <html lang="en">
 <head>
@@ -91,7 +97,14 @@ def detail_page(p, i):
 <meta property="og:title" content="{E(p["title"])} | Mohammadhossein Mohammadi">
 <meta property="og:description" content="{E(desc)}">
 <meta property="og:url" content="{SITE}projects/{p["slug"]}.html">
+<meta property="og:site_name" content="Mohammadhossein Mohammadi">
+<meta property="og:image" content="{SITE}mo.jpg">
+<meta property="og:image:width" content="560">
+<meta property="og:image:height" content="700">
+<meta property="og:image:alt" content="Portrait of Mohammadhossein Mohammadi">
+<meta name="twitter:card" content="summary">
 <script type="application/ld+json">{ld}</script>
+<script type="application/ld+json">{crumbs}</script>
 <link rel="icon" href="../favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
