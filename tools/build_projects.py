@@ -171,6 +171,15 @@ story = data.get('story') or [{'project': p['slug']} for p in projects]
 replace_block(os.path.join(ROOT, 'index.html'), '\n'.join(story_item(s, i) for i, s in enumerate(story)), marker='STORY')
 for i, p in enumerate(projects):
     open(os.path.join(ROOT, 'projects', p['slug'] + '.html'), 'w', encoding='utf-8').write(detail_page(p, i))
-urls = '\n'.join(f'  <url><loc>{SITE}projects/{p["slug"]}.html</loc></url>' for p in projects)
+def lastmod(slug):
+    # Date of the last commit that touched this project's page or its data; today if not committed yet.
+    import subprocess, datetime
+    try:
+        out = subprocess.run(['git', 'log', '-1', '--format=%cs', '--', f'projects/{slug}.html'],
+                             cwd=ROOT, capture_output=True, text=True).stdout.strip()
+    except OSError:
+        out = ''
+    return out or datetime.date.today().isoformat()
+urls = '\n'.join(f'  <url><loc>{SITE}projects/{p["slug"]}.html</loc><lastmod>{lastmod(p["slug"])}</lastmod></url>' for p in projects)
 replace_block(os.path.join(ROOT, 'sitemap.xml'), urls)
 print(f'Built {len(projects)} projects.')
