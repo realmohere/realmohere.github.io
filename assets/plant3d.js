@@ -6,13 +6,25 @@
  * flowers that open, a seed and roots in a cut-away block of soil, real light and shadow, and a camera
  * that turns slowly as you scroll. Nothing moves on its own: a frame is drawn only when plant.js asks.
  *
- * The flat SVG plant stays in use when this cannot run: reduced motion, no WebGL, or no JavaScript.
+ * The flat SVG plant stays in use when this cannot run: reduced motion, no WebGL, no JavaScript, or Save-Data.
  */
 const api = window.Plant;
 const gl = (() => { try { const c = document.createElement('canvas'); return !!(c.getContext('webgl2') || c.getContext('webgl')); } catch (e) { return false; } })();
 
-if (api && api.animated && gl) {
-  import('./vendor/three.module.min.js').then(start).catch(() => {});
+// Three.js is large (about 650 KB), so it is fetched only when the plant is about one screen away,
+// not on page load. Visitors who ask to save data keep the flat SVG plant.
+const saveData = !!(navigator.connection && navigator.connection.saveData);
+const grow = document.querySelector('#grow');
+if (api && api.animated && gl && !saveData && grow) {
+  const load = () => import('./vendor/three.module.min.js').then(start).catch(() => {});
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => {
+      if (entries.some((e) => e.isIntersecting)) { io.disconnect(); load(); }
+    }, { rootMargin: '100% 0px' });
+    io.observe(grow);
+  } else {
+    load();
+  }
 }
 
 function start(THREE) {
