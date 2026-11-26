@@ -33,7 +33,7 @@
       "status": "Research tool",
       "role": "Designed and built it",
       "summary": "An assistant that finds start-ups and organises their contact details by country and city, to speed up market and partner research.",
-      "outcome": null,
+      "outcome": "A working tool that groups start-ups and contacts by country and city.",
       "tags": [
         "AI tools",
         "Market research",
@@ -58,7 +58,7 @@
       "status": "Team case study, VU Amsterdam",
       "role": "Team member, with an equal share of the analysis and strategy work",
       "summary": "A citizen energy cooperative had sold 20% of the shares in a roughly 400-panel solar roof, and needed 70% before it could be built. We worked out why, and how to close the gap.",
-      "outcome": null,
+      "outcome": "A case report with a campaign, buy-in strategy and co-creation plan.",
       "tags": [
         "Energy transition",
         "Stakeholder mapping",
@@ -83,7 +83,7 @@
       "status": "M.A. thesis",
       "role": "Author, written with Duisburg Business & Innovation GmbH",
       "summary": "How policy, institutions, incentives and cooperation shape the move from linear to circular production in post-industrial Duisburg, compared with Amsterdam and Singapore.",
-      "outcome": null,
+      "outcome": "Completed as part of the M.A. in Philosophy, Politics & Economics.",
       "tags": [
         "Circular economy",
         "Policy analysis",
@@ -135,7 +135,7 @@
       "status": "In development",
       "role": "Product owner: defined the product, its rules and safety features, and built it with AI coding tools",
       "summary": "An app for meeting new people around Oss through small public hangouts: post a plan, others ask to join, the group chats and meets. References after each meetup build trust.",
-      "outcome": null,
+      "outcome": "In development, not public yet.",
       "tags": [
         "Product design",
         "React",
@@ -161,7 +161,7 @@
       "status": "In development",
       "role": "Product owner, adapting the Meetout codebase to a new audience",
       "summary": "Dog play dates in Noord-Brabant, starting in Oss. Owners make a profile for their dog, get matched with dogs of similar energy, size and play style, and plan open or private play dates.",
-      "outcome": null,
+      "outcome": "In development, not public yet.",
       "tags": [
         "Product design",
         "React",
@@ -187,7 +187,7 @@
       "status": "Prototype",
       "role": "Product owner, working with a team of AI role agents",
       "summary": "A no-shame life game for adults with ADHD, informed by CBT techniques: small real-life steps help your avatar grow, and missing a day never costs you anything.",
-      "outcome": null,
+      "outcome": "A playable prototype for playtesting.",
       "tags": [
         "Game design",
         "Behaviour change",
@@ -213,7 +213,7 @@
       "status": "Personal tools",
       "role": "Designed and built them",
       "summary": "Python pipelines that check online sources on a schedule, score new items with AI, draft tailored documents and wait for a human approval before anything is sent.",
-      "outcome": null,
+      "outcome": "In personal use, with human approval before anything is sent.",
       "tags": [
         "Python",
         "AI agents",
