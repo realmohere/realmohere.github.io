@@ -98,11 +98,11 @@ def detail_page(p, i):
 <meta property="og:description" content="{E(desc)}">
 <meta property="og:url" content="{SITE}projects/{p["slug"]}.html">
 <meta property="og:site_name" content="Mohammadhossein Mohammadi">
-<meta property="og:image" content="{SITE}mo.jpg">
-<meta property="og:image:width" content="560">
-<meta property="og:image:height" content="700">
-<meta property="og:image:alt" content="Portrait of Mohammadhossein Mohammadi">
-<meta name="twitter:card" content="summary">
+<meta property="og:image" content="{SITE}og-card.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Mohammadhossein Mohammadi at his M.A. graduation, with his name and momohammadi.nl">
+<meta name="twitter:card" content="summary_large_image">
 <script type="application/ld+json">{ld}</script>
 <script type="application/ld+json">{crumbs}</script>
 <link rel="icon" href="../favicon.svg" type="image/svg+xml">
