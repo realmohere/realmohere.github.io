@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Mohammadhossein Mohammadi | Economics Graduate (M.A. PPE) &amp; Mechanical Engineer</title>
+<title>Mohammadhossein Mohammadi | Mechanical Engineer, M.A. PPE</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<meta name="description" content="Mohammadhossein Mohammadi (Mo): economics graduate (M.A. PPE) and mechanical engineer in the Netherlands, open to roles in business development, energy and tech policy, and engineering.">
+<meta name="description" content="Mohammadhossein Mohammadi (Mo): mechanical engineer with an M.A. in PPE in the Netherlands, open to business development, energy and tech policy, and engineering roles.">
 <meta name="author" content="Mohammadhossein Mohammadi">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <link rel="canonical" href="https://momohammadi.nl/">
@@ -69,12 +69,18 @@
 }
 </script>
 
+<link rel="icon" href="favicon.ico" sizes="32x32">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
+<meta name="theme-color" content="#F4F1E9" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#131915" media="(prefers-color-scheme: dark)">
 <link rel="preload" href="assets/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/fraunces-latin-opsz-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="assets/fonts.css">
 <link rel="stylesheet" href="assets/site.css">
-<script>try{var t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<script>function setThemeColor(t){[].forEach.call(document.querySelectorAll('meta[name=theme-color]'),function(m){if(t){m.removeAttribute('media');m.content=t==='dark'?'#131915':'#F4F1E9'}})}try{var t=localStorage.getItem('theme');if(t){document.documentElement.setAttribute('data-theme',t);setThemeColor(t)}}catch(e){}</script>
+<noscript><style>.grow, #explore { display: none; }</style></noscript>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -678,6 +684,7 @@
     var cur = root.getAttribute('data-theme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
     var next = cur === 'dark' ? 'light' : 'dark';
     root.setAttribute('data-theme', next);
+    setThemeColor(next);
     try { localStorage.setItem('theme', next); } catch (e) {}
   });
 
