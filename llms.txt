@@ -1,6 +1,6 @@
 # Mohammadhossein Mohammadi (Mo)
 
-> Mohammadhossein Mohammadi, who goes by Mo Mohammadi, holds an M.A. in Philosophy, Politics & Economics (Witten/Herdecke University, 2026) and a B.Sc. in Mechanical Engineering, and has hands-on GMP cleanroom manufacturing experience. Mo is based in the 's-Hertogenbosch area, North Brabant, the Netherlands, and is open to roles that fit this profile, especially in innovation, sustainability, energy transition, policy and strategy, as well as engineering. Mo is authorised to work in the Netherlands.
+> Mohammadhossein Mohammadi, who goes by Mo Mohammadi, holds an M.A. in Philosophy, Politics & Economics (Witten/Herdecke University, 2026) and a B.Sc. in Mechanical Engineering, and has hands-on GMP cleanroom manufacturing experience. Mo is based in the 's-Hertogenbosch area, North Brabant, the Netherlands, and is open to roles in international business development, technology and energy policy, engineering and the energy transition. Mo is authorised to work in the Netherlands.
 
 - Website: https://momohammadi.nl/
 - LinkedIn: https://www.linkedin.com/in/mohammadhossein-m-55290210a
@@ -9,7 +9,7 @@
 
 ## The route so far
 
-2016 Mechanical Engineering → 2019 International Trade → 2024 Green Energy Innovation Projects → 2025 GMP Cleanroom Manufacturing → 2026 M.A. Philosophy, Politics & Economics → next: Innovation & Sustainability.
+2016 Mechanical Engineering → 2019 International Trade → 2024 Green Energy Innovation Projects → 2025 GMP Cleanroom Manufacturing → 2026 M.A. Philosophy, Politics & Economics → next: international business development, technology and energy policy, engineering and the energy transition.
 
 ## Experience
 
@@ -25,19 +25,19 @@
 Each project has its own page under https://momohammadi.nl/projects/ (listed in https://momohammadi.nl/sitemap.xml).
 
 Building now:
-- Meetout (2026, in development): mobile-first app for meeting new people around Oss through small public hangouts, with join requests, group chat and references after meeting. React, TypeScript, Firebase, Android.
-- Dogout (2026, in development): dog play dates in Noord-Brabant, starting in Oss; matches dogs by energy, size and play style. Built from the Meetout codebase, Dutch and English.
-- Tend (2026, prototype): a no-shame, CBT-informed life game for adults with ADHD, run with a team of AI role agents.
-- This website (2026, live): plain HTML on GitHub Pages with structured data, sitemap, Search Console/Bing, cookieless analytics.
+- Meetout (2026, in development): mobile-first app for meeting new people around Oss through small public hangouts, with join requests, group chat and references after meeting. React, TypeScript, Firebase, Android. Status: in development, not public yet.
+- Dogout (2026, in development): dog play dates in Noord-Brabant, starting in Oss; matches dogs by energy, size and play style. Built from the Meetout codebase, Dutch and English. Status: in development, not public yet.
+- Tend (2026, prototype): a no-shame, CBT-informed life game for adults with ADHD, run with a team of AI role agents. Status: a playable prototype for playtesting.
+- This website (2026, live): plain HTML on GitHub Pages with structured data, sitemap, Search Console/Bing, cookieless analytics. Status: live at momohammadi.nl.
 
 Research and study:
-- M.A. thesis "From Linear to Circular": policy pathways for economic resilience and sustainability in Duisburg's post-industrial transition, with Amsterdam and Singapore as comparative cases; written with Duisburg Business & Innovation GmbH.
-- Zon op Haarlemmermeer (2025, VU Amsterdam team case study): marketing and buy-in strategy for a citizen energy cooperative's ~400-panel municipal solar roof (20% of shares sold, 70% needed), with stakeholder mapping and a value-exchange model.
+- M.A. thesis "From Linear to Circular": policy pathways for economic resilience and sustainability in Duisburg's post-industrial transition, with Amsterdam and Singapore as comparative cases; written with Duisburg Business & Innovation GmbH. Completed as part of the M.A.
+- Zon op Haarlemmermeer (2025, VU Amsterdam team case study): marketing and buy-in strategy for a citizen energy cooperative's ~400-panel municipal solar roof (20% of shares sold, 70% needed), with stakeholder mapping and a value-exchange model. Outcome: a case report with a campaign, buy-in strategy and co-creation plan.
 
 Engineering and tools:
-- AI workflow automation (2026): Python pipelines that check online sources on a schedule, filter and score items with AI, draft tailored documents and wait for human approval before anything is sent; an AI-to-AI review loop with regression tests and command audit.
-- Hydrogen-generation prototype (personal side project): designed, built and tested a steel-plate hydrogen-generation system.
-- GPT-based research assistant that identifies start-ups and organises contacts by country and city.
+- AI workflow automation (2026): Python pipelines that check online sources on a schedule, filter and score items with AI, draft tailored documents and wait for human approval before anything is sent; an AI-to-AI review loop with regression tests and command audit. Status: in personal use, with human approval before anything is sent.
+- Hydrogen-generation prototype (personal side project): designed, built and tested a steel-plate hydrogen-generation system. Outcome: a working prototype, tested for gas output.
+- GPT-based research assistant that identifies start-ups and organises contacts by country and city. Outcome: a working tool.
 
 ## Volunteering
 
